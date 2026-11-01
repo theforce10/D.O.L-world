@@ -97,7 +97,6 @@ export function SignupPage() {
             id="fullName"
             autoComplete="name"
             icon={<User className="size-5" />}
-            placeholder="Ada Okafor"
             aria-invalid={!!errors.fullName}
             aria-describedby={describedBy('fullName', { error: errors.fullName })}
             {...register('fullName')}
@@ -110,7 +109,6 @@ export function SignupPage() {
             autoComplete="email"
             inputMode="email"
             icon={<Mail className="size-5" />}
-            placeholder="you@example.com"
             aria-invalid={!!errors.email}
             aria-describedby={describedBy('email', { error: errors.email })}
             {...register('email')}

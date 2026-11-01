@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Navigate, Outlet, useLocation, useSearchParams } from 'react-router'
 import { ErrorState, FullPageSpinner } from '@/components/ui/States'
 import { safeNext } from '@/lib/navigation'
@@ -6,9 +6,11 @@ import { errorMessage } from '@/lib/utils'
 import { isProfileComplete, useProfile } from '@/features/profile/api'
 import { useAuth } from './AuthProvider'
 
+
 function useCurrentPath() {
   const location = useLocation()
-  return location.pathname + location.search
+  const [path] = useState(location.pathname + location.search)
+  return path
 }
 
 /** Signed-in users only; everyone else goes to /login and comes back afterwards. */
