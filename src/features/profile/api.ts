@@ -10,7 +10,7 @@ export const profileKeys = {
 }
 
 export function isProfileComplete(profile: Profile | null | undefined): boolean {
-  return Boolean(profile?.full_name && profile.phone && profile.snapchat)
+  return Boolean(profile?.full_name && profile.phone)
 }
 
 export function useProfile() {
@@ -27,7 +27,7 @@ export function useProfile() {
 }
 
 /** Only the columns the database lets users edit (see column grants in the profiles migration). */
-export type ProfileUpdate = Partial<Pick<Profile, 'full_name' | 'phone' | 'snapchat' | 'avatar_url' | 'marketing_consent'>>
+export type ProfileUpdate = Partial<Pick<Profile, 'full_name' | 'phone' | 'avatar_url' | 'marketing_consent'>>
 
 export function useUpdateProfile() {
   const { user } = useAuth()

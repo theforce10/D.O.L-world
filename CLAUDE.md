@@ -9,7 +9,7 @@ Vite + React + TS (strict) · Tailwind v4 via @tailwindcss/vite · motion (impor
 - Brand: **DOL World** (`VITE_EVENT_BRAND`, `src/lib/brand.ts`).
 - Status enum: `waiting, up_next, singing, sung, skipped` (`singing` added = on stage; `events.current_number` follows it).
 - Consent checkbox is **required at onboarding** (unchecked by default); withdrawable later on /profile. `consent_at` is set/cleared by a DB trigger, clients only toggle `marketing_consent`.
-- Profile complete = full_name + phone (E.164) + snapchat (required; avatar optional).
+- Profile complete = full_name + phone (E.164); avatar optional. Snapchat was removed (column dropped in `20261101000001_drop_snapchat.sql`).
 - One active song (waiting/up_next/singing) per user per event.
 - `profiles.email` synced from auth.users by trigger.
 - Supabase auth uses default (implicit) flow so password-reset links work when opened in a phone's email app.

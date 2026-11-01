@@ -24,7 +24,7 @@ Attendees sign up, fill in a short profile, pick a song and get a queue number. 
 
 ## How it works
 
-**Attendee flow:** sign up with Google or email → onboarding (name, phone, Snapchat, marketing consent) → pick a song → ticket with their number → the page updates live and alerts them when they're up next.
+**Attendee flow:** sign up with Google or email → onboarding (name, phone, marketing consent) → pick a song → ticket with their number → the page updates live and alerts them when they're up next.
 
 **Admin flow:** `/admin` shows the live queue. Create and switch events, go live or end an event, press **Call next**, change any status, search, filter, sort and export CSV. `/admin/contacts` lists everyone, with an "opted in only" filter and CSV export.
 

@@ -32,7 +32,6 @@ const csvColumns: CsvColumn<QueueEntry>[] = [
   { header: 'Artist', value: (r) => r.artist },
   { header: 'Note', value: (r) => r.note },
   { header: 'Phone', value: (r) => r.profile?.phone },
-  { header: 'Snapchat', value: (r) => r.profile?.snapchat },
   { header: 'Email', value: (r) => r.profile?.email },
   { header: 'Submitted', value: (r) => new Date(r.created_at).toISOString() },
   { header: 'Status', value: (r) => statusMeta[r.status].label },
@@ -41,7 +40,7 @@ const csvColumns: CsvColumn<QueueEntry>[] = [
 function matches(entry: QueueEntry, q: string): boolean {
   if (!q) return true
   const p = entry.profile
-  const haystack = [entry.queue_number, entry.song_title, entry.artist, entry.note, p?.full_name, p?.phone, p?.snapchat, p?.email]
+  const haystack = [entry.queue_number, entry.song_title, entry.artist, entry.note, p?.full_name, p?.phone, p?.email]
   return haystack.some((v) => v != null && String(v).toLowerCase().includes(q))
 }
 

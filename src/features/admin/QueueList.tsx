@@ -1,4 +1,4 @@
-import { AtSign, Mail, MessageSquareText, Phone } from 'lucide-react'
+import { Mail, MessageSquareText, Phone } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Avatar } from '@/components/ui/Avatar'
 import { Card } from '@/components/ui/Card'
@@ -52,11 +52,6 @@ function Contact({ entry, className }: { entry: QueueEntry; className?: string }
       {p?.phone && (
         <a href={`tel:${p.phone}`} className={contactLink}>
           <Phone aria-hidden className="size-3.5" /> {formatPhone(p.phone)}
-        </a>
-      )}
-      {p?.snapchat && (
-        <a href={`https://www.snapchat.com/add/${p.snapchat}`} target="_blank" rel="noreferrer" className={contactLink}>
-          <AtSign aria-hidden className="size-3.5" /> {p.snapchat}
         </a>
       )}
       {p?.email && (

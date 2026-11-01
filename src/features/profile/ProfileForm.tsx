@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AtSign, Phone, User } from 'lucide-react'
+import { Phone, User } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
@@ -32,7 +32,6 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
     defaultValues: {
       full_name: profile.full_name ?? '',
       phone: profile.phone ? formatPhone(profile.phone) : '',
-      snapchat: profile.snapchat ?? '',
       // Unchecked by default at onboarding, as required.
       marketing_consent: mode === 'onboarding' ? false : profile.marketing_consent,
     },
@@ -87,23 +86,6 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
             aria-invalid={!!errors.phone}
             aria-describedby={describedBy('phone', { error: errors.phone, hint: true })}
             {...register('phone')}
-          />
-        </Field>
-      </motion.div>
-
-      <motion.div variants={rise}>
-        <Field id="snapchat" label="Snapchat username" error={errors.snapchat?.message}>
-          <Input
-            id="snapchat"
-            autoComplete="off"
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck={false}
-            icon={<AtSign className="size-5" />}
-            placeholder="yourname"
-            aria-invalid={!!errors.snapchat}
-            aria-describedby={describedBy('snapchat', { error: errors.snapchat })}
-            {...register('snapchat')}
           />
         </Field>
       </motion.div>

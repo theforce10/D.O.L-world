@@ -1,4 +1,4 @@
-import { AtSign, Download, Mail, Phone, Search, Users } from 'lucide-react'
+import { Download, Mail, Phone, Search, Users } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useDeferredValue, useMemo, useState } from 'react'
 import { toast } from 'sonner'
@@ -26,7 +26,6 @@ const csvColumns: CsvColumn<Contact>[] = [
   { header: 'Name', value: (c) => c.full_name },
   { header: 'Email', value: (c) => c.email },
   { header: 'Phone', value: (c) => c.phone },
-  { header: 'Snapchat', value: (c) => c.snapchat },
   { header: 'Marketing consent', value: (c) => (c.marketing_consent ? 'yes' : 'no') },
   { header: 'Consent given at', value: (c) => c.consent_at },
   { header: 'Events attended', value: (c) => c.events_attended },
@@ -37,7 +36,7 @@ const csvColumns: CsvColumn<Contact>[] = [
 
 function matches(c: Contact, q: string): boolean {
   if (!q) return true
-  return [c.full_name, c.email, c.phone, c.snapchat].some((v) => v?.toLowerCase().includes(q))
+  return [c.full_name, c.email, c.phone].some((v) => v?.toLowerCase().includes(q))
 }
 
 function ConsentBadge({ consent }: { consent: boolean }) {
@@ -61,11 +60,6 @@ function ContactLinks({ c, className }: { c: Contact; className?: string }) {
       {c.phone && (
         <a href={`tel:${c.phone}`} className={contactLink}>
           <Phone aria-hidden className="size-3.5" /> {formatPhone(c.phone)}
-        </a>
-      )}
-      {c.snapchat && (
-        <a href={`https://www.snapchat.com/add/${c.snapchat}`} target="_blank" rel="noreferrer" className={contactLink}>
-          <AtSign aria-hidden className="size-3.5" /> {c.snapchat}
         </a>
       )}
       {c.email && (
@@ -116,7 +110,7 @@ export function ContactsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             icon={<Search className="size-5" />}
-            placeholder="Search name, email, phone, Snapchat…"
+            placeholder="Search name, email, phone…"
             className="min-h-11 py-2 sm:text-sm"
           />
         </div>

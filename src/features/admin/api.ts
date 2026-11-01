@@ -92,7 +92,7 @@ export function useSetActiveEvent() {
 }
 
 const QUEUE_SELECT =
-  'id, queue_number, song_title, artist, note, status, created_at, updated_at, user_id, profile:profiles(full_name, email, phone, snapchat, avatar_url)'
+  'id, queue_number, song_title, artist, note, status, created_at, updated_at, user_id, profile:profiles(full_name, email, phone, avatar_url)'
 
 export function useEventQueue(eventId: string | undefined) {
   return useQuery({

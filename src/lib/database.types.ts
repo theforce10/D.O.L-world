@@ -69,7 +69,6 @@ export type Database = {
           id: string;
           marketing_consent: boolean;
           phone: string | null;
-          snapchat: string | null;
           updated_at: string;
         };
         Insert: {
@@ -81,7 +80,6 @@ export type Database = {
           id: string;
           marketing_consent?: boolean;
           phone?: string | null;
-          snapchat?: string | null;
           updated_at?: string;
         };
         Update: {
@@ -93,7 +91,6 @@ export type Database = {
           id?: string;
           marketing_consent?: boolean;
           phone?: string | null;
-          snapchat?: string | null;
           updated_at?: string;
         };
         Relationships: [];
@@ -169,7 +166,6 @@ export type Database = {
           last_song_at: string;
           marketing_consent: boolean;
           phone: string;
-          snapchat: string;
           total_songs: number;
           user_id: string;
         }[];

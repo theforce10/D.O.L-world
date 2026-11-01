@@ -82,7 +82,7 @@ Deno.serve(async (req) => {
   if (payload.type !== 'INSERT' || payload.table !== 'song_requests' || !song) return json(200, { skipped: true })
 
   const [{ data: profile, error: profileError }, { data: event, error: eventError }] = await Promise.all([
-    admin.from('profiles').select('full_name, email, phone, snapchat').eq('id', song.user_id).maybeSingle(),
+    admin.from('profiles').select('full_name, email, phone').eq('id', song.user_id).maybeSingle(),
     admin.from('events').select('name, venue').eq('id', song.event_id).maybeSingle(),
   ])
   if (profileError || eventError) {
@@ -101,7 +101,6 @@ Deno.serve(async (req) => {
     ['Artist', song.artist],
     ['Note', song.note],
     ['Phone', profile?.phone],
-    ['Snapchat', profile?.snapchat],
     ['Email', profile?.email],
     ['Event', event?.venue ? `${eventName} · ${event.venue}` : eventName],
     ['Submitted', `${time} (Lagos time)`],

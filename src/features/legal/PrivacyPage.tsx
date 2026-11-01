@@ -18,7 +18,7 @@ export function PrivacyPage() {
             <strong>Account details:</strong> your email address, and your name and profile photo if you sign in with Google.
           </li>
           <li>
-            <strong>Profile:</strong> your full name, phone number, Snapchat username and, if you add one, a profile photo.
+            <strong>Profile:</strong> your full name, phone number and, if you add one, a profile photo.
           </li>
           <li>
             <strong>Songs:</strong> the songs you submit, any note for the host, your queue number and when you sang.
