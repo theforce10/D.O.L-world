@@ -38,7 +38,6 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
   })
 
   const phone = useWatch({ control, name: 'phone' })
-  // Only worth previewing when we're converting a local number; "+234…" input is already in the saved format.
   const phonePreview = phone && !phone.trim().startsWith('+') ? toE164(phone) : null
 
   return (

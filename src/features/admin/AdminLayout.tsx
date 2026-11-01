@@ -1,4 +1,4 @@
-import { ListMusic, Users } from 'lucide-react'
+import { House, ListMusic, Users } from 'lucide-react'
 import { NavLink, Outlet } from 'react-router'
 import { Avatar } from '@/components/ui/Avatar'
 import { Logo } from '@/components/ui/Logo'
@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { useProfile } from '@/features/profile/api'
 
 const tabs = [
+  { to: '/', label: 'Home', icon: House, end: true },
   { to: '/admin', label: 'Queue', icon: ListMusic, end: true },
   { to: '/admin/contacts', label: 'Contacts', icon: Users, end: false },
 ]

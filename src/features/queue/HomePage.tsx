@@ -191,7 +191,12 @@ export function HomePage() {
         </LayoutGroup>
       </main>
 
-      <TicketReveal ticket={ticket?.ticket ?? null} celebrate={ticket?.celebrate ?? false} onClose={closeTicket} />
+      <TicketReveal
+        ticket={ticket?.ticket ?? null}
+        name={profile?.full_name}
+        celebrate={ticket?.celebrate ?? false}
+        onClose={closeTicket}
+      />
     </>
   )
 }

@@ -1,9 +1,7 @@
--- Snapchat is no longer collected. The return type changes, so admin_contacts() must be dropped and recreated.
 drop function public.admin_contacts();
 
 alter table public.profiles drop column snapchat;
 
--- One row per attendee for the Contacts page / CSV export.
 create function public.admin_contacts()
 returns table (
   user_id           uuid,

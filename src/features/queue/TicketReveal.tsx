@@ -15,14 +15,21 @@ export interface Ticket {
 }
 
 /** Full-screen ticket: spring scale-in, confetti burst, number counting up. */
-export function TicketReveal({ ticket, celebrate, onClose }: { ticket: Ticket | null; celebrate: boolean; onClose: () => void }) {
+export function TicketReveal({ ticket, name, celebrate, onClose }: Omit<TicketDialogProps, 'ticket'> & { ticket: Ticket | null }) {
   return createPortal(
-    <AnimatePresence>{ticket && <TicketDialog ticket={ticket} celebrate={celebrate} onClose={onClose} />}</AnimatePresence>,
+    <AnimatePresence>{ticket && <TicketDialog ticket={ticket} name={name} celebrate={celebrate} onClose={onClose} />}</AnimatePresence>,
     document.body,
   )
 }
 
-function TicketDialog({ ticket, celebrate, onClose }: { ticket: Ticket; celebrate: boolean; onClose: () => void }) {
+interface TicketDialogProps {
+  ticket: Ticket
+  name: string | null | undefined
+  celebrate: boolean
+  onClose: () => void
+}
+
+function TicketDialog({ ticket, name, celebrate, onClose }: TicketDialogProps) {
   const titleId = useId()
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -73,9 +80,16 @@ function TicketDialog({ ticket, celebrate, onClose }: { ticket: Ticket; celebrat
             </button>
 
             <p className="font-display text-xs font-bold uppercase tracking-[0.3em] text-gold-soft">{BRAND}</p>
-            <h2 id={titleId} className="mt-1 text-lg font-bold text-ink-muted">
-              Your number
-            </h2>
+            {name ? (
+              <h2 id={titleId} className="mt-2 px-8">
+                <span className="block break-words text-2xl font-bold text-ink">{name}</span>
+                <span className="mt-0.5 block font-sans text-sm font-medium text-ink-muted">your number</span>
+              </h2>
+            ) : (
+              <h2 id={titleId} className="mt-1 text-lg font-bold text-ink-muted">
+                Your number
+              </h2>
+            )}
 
             <motion.p
               className="my-2 font-display text-[6.5rem] font-extrabold leading-none text-gradient drop-shadow-[0_0_30px_rgb(255_61_46/0.45)] sm:text-[8rem]"
