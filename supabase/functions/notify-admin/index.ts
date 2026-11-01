@@ -110,22 +110,22 @@ Deno.serve(async (req) => {
   const subject = `🎤 #${song.queue_number} ${name}: ${song.song_title}`
   const text = [...filled.map(([k, v]) => `${k}: ${v}`), APP_URL ? `\nOpen the queue: ${APP_URL}/admin` : ''].join('\n')
   const html = `<!doctype html>
-<html><body style="margin:0;background:#0e0620;font-family:Inter,Arial,sans-serif;color:#f5f0ff">
+<html><body style="margin:0;background:#1a0907;font-family:Inter,Arial,sans-serif;color:#fff5e8">
   <div style="max-width:520px;margin:0 auto;padding:24px">
-    <p style="margin:0;color:#8ef2ff;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:700">${escapeHtml(BRAND)}</p>
-    <h1 style="margin:8px 0 4px;font-size:40px;color:#ff7ab8">#${song.queue_number}</h1>
+    <p style="margin:0;color:#ffe38a;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:700">${escapeHtml(BRAND)}</p>
+    <h1 style="margin:8px 0 4px;font-size:40px;color:#ff8a6e">#${song.queue_number}</h1>
     <p style="margin:0 0 20px;font-size:18px"><strong>${escapeHtml(name)}</strong> picked <strong>${escapeHtml(song.song_title)}</strong> by ${escapeHtml(song.artist)}</p>
-    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#170b30;border-radius:16px">
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#250e0b;border-radius:16px">
       ${filled
         .map(
           ([k, v]) =>
-            `<tr><td style="padding:10px 16px;color:#b9add8;font-size:14px;width:110px;border-bottom:1px solid #24124a">${k}</td><td style="padding:10px 16px;font-size:14px;border-bottom:1px solid #24124a">${escapeHtml(v)}</td></tr>`,
+            `<tr><td style="padding:10px 16px;color:#dcc3ad;font-size:14px;width:110px;border-bottom:1px solid #3a1611">${k}</td><td style="padding:10px 16px;font-size:14px;border-bottom:1px solid #3a1611">${escapeHtml(v)}</td></tr>`,
         )
         .join('')}
     </table>
     ${
       APP_URL
-        ? `<p style="margin:24px 0 0"><a href="${escapeHtml(APP_URL)}/admin" style="display:inline-block;background:#ff2e93;color:#07030f;font-weight:700;text-decoration:none;padding:12px 20px;border-radius:12px">Open the live queue</a></p>`
+        ? `<p style="margin:24px 0 0"><a href="${escapeHtml(APP_URL)}/admin" style="display:inline-block;background:#ff3d2e;color:#120505;font-weight:700;text-decoration:none;padding:12px 20px;border-radius:12px">Open the live queue</a></p>`
         : ''
     }
   </div>

@@ -1,44 +1,52 @@
 @import 'tailwindcss';
 
-/* Neon karaoke night palette. All text colours below meet WCAG AA on night-900. */
+/* Red & gold karaoke night palette. All text colours below meet WCAG AA on night-900. */
 @theme {
   --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --color-night-950: #07030f;
-  --color-night-900: #0e0620;
-  --color-night-800: #170b30;
-  --color-night-700: #24124a;
-  --color-night-600: #352066;
-  --color-night-500: #4b2f8a;
+  --color-night-950: #120505;
+  --color-night-900: #1a0907;
+  --color-night-800: #250e0b;
+  --color-night-700: #3a1611;
+  --color-night-600: #52201a;
+  --color-night-500: #6e2e22;
 
-  --color-ink: #f5f0ff;
-  --color-ink-muted: #b9add8;
-  --color-ink-subtle: #8f82b3;
+  --color-ink: #fff5e8;
+  --color-ink-muted: #dcc3ad;
+  --color-ink-subtle: #b0927c;
 
-  --color-pink: #ff2e93;
-  --color-pink-soft: #ff7ab8;
-  --color-cyan: #22e4ff;
-  --color-cyan-soft: #8ef2ff;
-  --color-violet: #a855f7;
+  --color-flame: #ff3d2e;
+  --color-flame-soft: #ff8a6e;
+  --color-gold: #ffc72c;
+  --color-gold-soft: #ffe38a;
+  --color-ember: #ff7a1a;
   --color-lime: #b6ff5c;
   --color-amber: #ffc53d;
-  --color-danger: #ff5c7a;
+  --color-danger: #ff6b6b;
 
-  --shadow-glow-pink: 0 0 0 1px rgb(255 46 147 / 0.5), 0 0 28px -4px rgb(255 46 147 / 0.6);
-  --shadow-glow-cyan: 0 0 0 1px rgb(34 228 255 / 0.45), 0 0 28px -4px rgb(34 228 255 / 0.55);
+  --shadow-glow-flame: 0 0 0 1px rgb(255 61 46 / 0.5), 0 0 28px -4px rgb(255 61 46 / 0.6);
+  --shadow-glow-gold: 0 0 0 1px rgb(255 199 44 / 0.45), 0 0 28px -4px rgb(255 199 44 / 0.55);
   --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -20px rgb(0 0 0 / 0.6);
 
   --animate-gradient-pan: gradient-pan 12s ease-in-out infinite alternate;
   --animate-shimmer: shimmer 1.6s linear infinite;
 
   @keyframes gradient-pan {
-    from { background-position: 0% 50%; }
-    to { background-position: 100% 50%; }
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 100% 50%;
+    }
   }
   @keyframes shimmer {
-    from { background-position: -200% 0; }
-    to { background-position: 200% 0; }
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
   }
 }
 
@@ -54,21 +62,23 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     @apply font-display tracking-tight;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-cyan;
+    @apply outline-2 outline-offset-2 outline-gold;
   }
 
   ::selection {
-    @apply bg-pink/40 text-ink;
+    @apply bg-flame/40 text-ink;
   }
 }
 
 @utility text-gradient {
-  background-image: linear-gradient(100deg, var(--color-pink) 10%, var(--color-violet) 50%, var(--color-cyan) 90%);
+  background-image: linear-gradient(100deg, var(--color-flame) 10%, var(--color-ember) 50%, var(--color-gold) 90%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -81,7 +91,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;

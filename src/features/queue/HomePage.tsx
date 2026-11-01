@@ -75,8 +75,8 @@ export function HomePage() {
             <>
               <h1 className="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-extrabold sm:text-3xl">
                 {event.data.name}
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-pink/15 px-2.5 py-0.5 font-sans text-xs font-bold uppercase tracking-wider text-pink-soft">
-                  <span className="size-1.5 rounded-full bg-pink motion-safe:animate-pulse" /> Live
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-flame/15 px-2.5 py-0.5 font-sans text-xs font-bold uppercase tracking-wider text-flame-soft">
+                  <span className="size-1.5 rounded-full bg-flame motion-safe:animate-pulse" /> Live
                 </span>
               </h1>
               <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
@@ -145,7 +145,7 @@ export function HomePage() {
                   ) : mine.data ? (
                     <motion.div key="my-song" layout {...section}>
                       <Card className="flex items-center gap-4">
-                        <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-2xl font-extrabold text-cyan">
+                        <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-2xl font-extrabold text-gold">
                           #{mine.data.queue_number}
                         </div>
                         <div className="min-w-0 flex-1">

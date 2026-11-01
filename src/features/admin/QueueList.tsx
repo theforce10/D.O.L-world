@@ -13,7 +13,7 @@ const timeFormat = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute:
 const statuses = Object.keys(statusMeta) as RequestStatus[]
 
 const rowHighlight: Partial<Record<RequestStatus, string>> = {
-  singing: 'bg-pink/[0.07]',
+  singing: 'bg-flame/[0.07]',
   up_next: 'bg-amber/[0.05]',
 }
 
@@ -26,7 +26,7 @@ function StatusSelect({ entry, onChange, disabled }: { entry: QueueEntry; onChan
         disabled={disabled}
         onChange={(e) => onChange(e.target.value as RequestStatus)}
         className={cn(
-          'min-h-11 w-full cursor-pointer appearance-none rounded-xl border border-white/10 py-2 pl-3 pr-8 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70',
+          'min-h-11 w-full cursor-pointer appearance-none rounded-xl border border-white/10 py-2 pl-3 pr-8 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70',
           statusMeta[entry.status].className,
         )}
       >
@@ -43,7 +43,7 @@ function StatusSelect({ entry, onChange, disabled }: { entry: QueueEntry; onChan
   )
 }
 
-const contactLink = 'inline-flex min-h-8 items-center gap-1.5 text-ink-muted hover:text-cyan-soft'
+const contactLink = 'inline-flex min-h-8 items-center gap-1.5 text-ink-muted hover:text-gold-soft'
 
 function Contact({ entry, className }: { entry: QueueEntry; className?: string }) {
   const p = entry.profile
@@ -85,7 +85,7 @@ export function QueueList({ entries, onStatusChange, pendingId }: QueueListProps
             >
               <Card className={cn('space-y-3 p-4 sm:p-5', rowHighlight[entry.status])}>
                 <div className="flex items-start gap-3">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-lg font-extrabold text-cyan">
+                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-lg font-extrabold text-gold">
                     #{entry.queue_number}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -147,7 +147,7 @@ export function QueueList({ entries, onStatusChange, pendingId }: QueueListProps
                   exit={{ opacity: 0 }}
                   className={cn('border-b border-white/5 align-top last:border-0', rowHighlight[entry.status])}
                 >
-                  <td className="px-4 py-3 font-display text-lg font-extrabold text-cyan">{entry.queue_number}</td>
+                  <td className="px-4 py-3 font-display text-lg font-extrabold text-gold">{entry.queue_number}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
                       <Avatar src={entry.profile?.avatar_url} name={entry.profile?.full_name} className="size-8 text-xs" />

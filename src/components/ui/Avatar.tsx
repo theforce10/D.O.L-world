@@ -14,7 +14,7 @@ export function Avatar({ src, name, className }: { src?: string | null; name?: s
   return (
     <span
       className={cn(
-        'relative inline-grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-[linear-gradient(135deg,var(--color-pink),var(--color-violet))] font-display font-bold text-night-950',
+        'relative inline-grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-[linear-gradient(135deg,var(--color-flame),var(--color-ember))] font-display font-bold text-night-950',
         className,
       )}
     >

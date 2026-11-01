@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 
-const COLORS = ['#ff2e93', '#22e4ff', '#a855f7', '#b6ff5c', '#ffc53d', '#f5f0ff']
+const COLORS = ['#ff3d2e', '#ffc72c', '#ff7a1a', '#ff8a6e', '#ffe38a', '#fff5e8']
 
 interface Piece {
   id: number

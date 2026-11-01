@@ -11,7 +11,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
     <div className={cn('relative', className)}>
       <select
         ref={ref}
-        className="min-h-11 w-full appearance-none rounded-xl border border-white/10 bg-night-800/70 py-2 pl-3.5 pr-10 text-base text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/70 disabled:opacity-60 sm:text-sm"
+        className="min-h-11 w-full appearance-none rounded-xl border border-white/10 bg-night-800/70 py-2 pl-3.5 pr-10 text-base text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 disabled:opacity-60 sm:text-sm"
         {...props}
       >
         {children}

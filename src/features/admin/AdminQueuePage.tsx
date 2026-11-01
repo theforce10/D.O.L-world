@@ -202,8 +202,8 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
         <div className="flex flex-wrap items-center gap-2">
           {event.is_active ? (
             <>
-              <span className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-pink/15 px-3 text-sm font-bold uppercase tracking-wider text-pink-soft">
-                <span className="size-2 rounded-full bg-pink motion-safe:animate-pulse" /> Live
+              <span className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-flame/15 px-3 text-sm font-bold uppercase tracking-wider text-flame-soft">
+                <span className="size-2 rounded-full bg-flame motion-safe:animate-pulse" /> Live
               </span>
               <Button variant="danger" size="sm" onClick={() => setConfirm('end')}>
                 <Square aria-hidden className="size-4" /> End event
@@ -222,7 +222,7 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
 
       {/* Stage */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
-        <StageCard label="On stage" accent="text-pink-soft" entry={singing} />
+        <StageCard label="On stage" accent="text-flame-soft" entry={singing} />
         <StageCard label="Up next" accent="text-amber" entry={upNext} />
         <Card className="flex items-center justify-between gap-4 p-4 sm:col-span-2 sm:p-5 lg:col-span-1 lg:flex-col lg:justify-center lg:text-center">
           <p className="text-xs font-medium uppercase tracking-wider text-ink-subtle">Still to sing</p>

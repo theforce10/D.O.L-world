@@ -52,7 +52,7 @@ function ConsentBadge({ consent }: { consent: boolean }) {
   )
 }
 
-const contactLink = 'inline-flex min-h-8 items-center gap-1.5 text-ink-muted hover:text-cyan-soft'
+const contactLink = 'inline-flex min-h-8 items-center gap-1.5 text-ink-muted hover:text-gold-soft'
 
 function ContactLinks({ c, className }: { c: Contact; className?: string }) {
   return (

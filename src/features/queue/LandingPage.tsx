@@ -18,7 +18,7 @@ export function LandingPage() {
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col px-4 pb-10 pt-[max(0.5rem,env(safe-area-inset-top))]">
       <header className="flex items-center justify-between py-2">
         <Logo />
-        <Link to="/login" className="inline-flex min-h-11 items-center rounded-xl px-3 font-semibold text-cyan-soft hover:text-cyan">
+        <Link to="/login" className="inline-flex min-h-11 items-center rounded-xl px-3 font-semibold text-gold-soft hover:text-gold">
           Log in
         </Link>
       </header>
@@ -40,14 +40,14 @@ export function LandingPage() {
           <motion.div whileTap={{ scale: 0.96 }}>
             <Link
               to="/signup"
-              className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(110deg,var(--color-pink),var(--color-violet))] px-7 text-lg font-semibold text-night-950 shadow-glow-pink hover:brightness-110"
+              className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(110deg,var(--color-flame),var(--color-ember))] px-7 text-lg font-semibold text-night-950 shadow-glow-flame hover:brightness-110"
             >
               <Mic aria-hidden className="size-5" /> Get my number
             </Link>
           </motion.div>
           <Link
             to="/login"
-            className="flex min-h-12 items-center justify-center rounded-2xl border border-white/15 font-semibold text-ink hover:border-cyan/60"
+            className="flex min-h-12 items-center justify-center rounded-2xl border border-white/15 font-semibold text-ink hover:border-gold/60"
           >
             I already have an account
           </Link>
@@ -60,7 +60,7 @@ export function LandingPage() {
               variants={rise}
               className="flex gap-3 rounded-2xl border border-white/10 bg-night-800/60 p-4 sm:flex-col"
             >
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-night-700 text-cyan">
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-night-700 text-gold">
                 <Icon aria-hidden className="size-5" />
               </span>
               <div>

@@ -44,7 +44,7 @@ export function TermsPage() {
         <h2>Privacy</h2>
         <p>
           How we handle your details is explained in our{' '}
-          <Link to="/privacy" className="font-semibold text-cyan-soft underline-offset-4 hover:underline">
+          <Link to="/privacy" className="font-semibold text-gold-soft underline-offset-4 hover:underline">
             privacy policy
           </Link>
           .

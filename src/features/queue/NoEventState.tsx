@@ -32,7 +32,7 @@ export function NoEventState() {
               <motion.span
                 key={i}
                 aria-hidden
-                className="absolute -right-2 -top-2 font-display font-bold text-cyan-soft"
+                className="absolute -right-2 -top-2 font-display font-bold text-gold-soft"
                 initial={{ opacity: 0, x: 0, y: 0 }}
                 animate={{ opacity: [0, 1, 0], x: 14 + i * 6, y: -24 - i * 10 }}
                 transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.6 }}

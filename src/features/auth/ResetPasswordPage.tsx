@@ -55,7 +55,7 @@ export function ResetPasswordPage() {
         <motion.div variants={rise}>
           <Link
             to="/forgot-password"
-            className="flex min-h-14 w-full items-center justify-center rounded-2xl bg-[linear-gradient(110deg,var(--color-pink),var(--color-violet))] px-7 text-lg font-semibold text-night-950 shadow-glow-pink"
+            className="flex min-h-14 w-full items-center justify-center rounded-2xl bg-[linear-gradient(110deg,var(--color-flame),var(--color-ember))] px-7 text-lg font-semibold text-night-950 shadow-glow-flame"
           >
             Send a new link
           </Link>

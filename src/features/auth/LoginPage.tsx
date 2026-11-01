@@ -41,7 +41,7 @@ export function LoginPage() {
       footer={
         <>
           New here?{' '}
-          <Link to={`/signup${nextQuery}`} className="font-semibold text-cyan-soft underline-offset-4 hover:underline">
+          <Link to={`/signup${nextQuery}`} className="font-semibold text-gold-soft underline-offset-4 hover:underline">
             Create an account
           </Link>
         </>
@@ -77,7 +77,7 @@ export function LoginPage() {
         <div className="flex justify-end">
           <Link
             to="/forgot-password"
-            className="inline-flex min-h-11 items-center text-sm font-medium text-cyan-soft underline-offset-4 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm font-medium text-gold-soft underline-offset-4 hover:underline"
           >
             Forgot password?
           </Link>

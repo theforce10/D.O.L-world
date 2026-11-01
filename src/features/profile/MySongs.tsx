@@ -47,7 +47,7 @@ export function MySongs() {
             variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
             className="flex items-center gap-4 rounded-2xl border border-white/10 bg-night-900/50 p-4"
           >
-            <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-xl font-bold text-cyan">
+            <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-xl font-bold text-gold">
               <span className="sr-only">Number </span>#{song.queue_number}
             </div>
             <div className="min-w-0 flex-1">

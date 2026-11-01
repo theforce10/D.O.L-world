@@ -316,4 +316,4 @@ supabase/
 Accessibility and motion:
 - Every animation respects the phone's "reduce motion" setting (`MotionConfig reducedMotion="user"` plus a CSS fallback).
 - Tap targets are at least 44px, and layouts work from 320px wide.
-- Pink buttons use dark text for contrast.
+- Red (flame) buttons use dark text for contrast.

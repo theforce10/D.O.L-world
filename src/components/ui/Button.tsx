@@ -7,8 +7,8 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-[linear-gradient(110deg,var(--color-pink),var(--color-violet))] text-night-950 shadow-glow-pink hover:brightness-110',
-  secondary: 'border border-cyan/50 bg-night-800/60 text-cyan-soft hover:bg-night-700 hover:border-cyan',
+  primary: 'bg-[linear-gradient(110deg,var(--color-flame),var(--color-ember))] text-night-950 shadow-glow-flame hover:brightness-110',
+  secondary: 'border border-gold/50 bg-night-800/60 text-gold-soft hover:bg-night-700 hover:border-gold',
   ghost: 'text-ink-muted hover:bg-white/5 hover:text-ink',
   danger: 'border border-danger/50 bg-danger/10 text-danger hover:bg-danger/20',
 }

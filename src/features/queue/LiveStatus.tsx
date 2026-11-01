@@ -6,15 +6,15 @@ import { Card } from '@/components/ui/Card'
 import type { QueueStatus } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
-function Stat({ label, children, accent }: { label: string; children: ReactNode; accent?: 'pink' | 'cyan' }) {
+function Stat({ label, children, accent }: { label: string; children: ReactNode; accent?: 'flame' | 'gold' }) {
   return (
     <div className="min-w-0 rounded-2xl border border-white/10 bg-night-900/60 p-3 text-center sm:p-4">
       <p className="text-xs font-medium uppercase tracking-wider text-ink-subtle">{label}</p>
       <p
         className={cn(
           'mt-1 font-display text-3xl font-extrabold sm:text-4xl',
-          accent === 'pink' && 'text-pink-soft',
-          accent === 'cyan' && 'text-cyan',
+          accent === 'flame' && 'text-flame-soft',
+          accent === 'gold' && 'text-gold',
         )}
       >
         {children}
@@ -55,12 +55,12 @@ export function LiveStatus({ status, onShowTicket }: { status: QueueStatus; onSh
       </div>
 
       <div className={cn('grid gap-3', inPlay && mine ? 'grid-cols-3' : 'grid-cols-2')}>
-        <Stat label="Now singing" accent="pink">
+        <Stat label="Now singing" accent="flame">
           {status.current_number > 0 ? <AnimatedNumber value={`#${status.current_number}`} /> : '–'}
         </Stat>
         {inPlay && mine ? (
           <>
-            <Stat label="You're" accent="cyan">
+            <Stat label="You're" accent="gold">
               #{mine}
             </Stat>
             <Stat label="Ahead">
@@ -95,7 +95,7 @@ export function LiveStatus({ status, onShowTicket }: { status: QueueStatus; onSh
         <button
           type="button"
           onClick={onShowTicket}
-          className="mx-auto flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-cyan-soft hover:text-cyan"
+          className="mx-auto flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-gold-soft hover:text-gold"
         >
           <TicketIcon aria-hidden className="size-4" /> Show my ticket
         </button>
@@ -119,13 +119,13 @@ export function UpNextAlert({ status }: { status: QueueStatus }) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="relative overflow-hidden rounded-3xl bg-[linear-gradient(110deg,var(--color-pink),var(--color-violet),var(--color-cyan))] bg-[length:200%_100%] p-[2px] animate-gradient-pan"
+          className="relative overflow-hidden rounded-3xl bg-[linear-gradient(110deg,var(--color-flame),var(--color-ember),var(--color-gold))] bg-[length:200%_100%] p-[2px] animate-gradient-pan"
         >
           <div className="flex items-center gap-4 rounded-[calc(1.5rem-2px)] bg-night-900/90 p-5">
             <motion.div
               animate={{ rotate: [0, -14, 14, -10, 10, 0], scale: [1, 1.1, 1] }}
               transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 1.2 }}
-              className="grid size-14 shrink-0 place-items-center rounded-2xl bg-pink text-night-950 shadow-glow-pink"
+              className="grid size-14 shrink-0 place-items-center rounded-2xl bg-flame text-night-950 shadow-glow-flame"
             >
               {onStage ? <PartyPopper aria-hidden className="size-7" /> : <BellRing aria-hidden className="size-7" />}
             </motion.div>
@@ -135,7 +135,7 @@ export function UpNextAlert({ status }: { status: QueueStatus }) {
                 {onStage ? 'The stage is yours. Go get them.' : `Number #${status.my_number}: head to the stage and get ready.`}
               </p>
             </div>
-            <Mic aria-hidden className="ml-auto hidden size-8 text-pink-soft sm:block" />
+            <Mic aria-hidden className="ml-auto hidden size-8 text-flame-soft sm:block" />
           </div>
         </motion.div>
       )}

@@ -8,12 +8,12 @@ export function SpotlightBg() {
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-night-900">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-night-700),transparent_60%)]" />
       <motion.div
-        className="absolute -left-1/4 -top-1/4 size-[70vmax] rounded-full bg-pink/20 blur-[100px]"
+        className="absolute -left-1/4 -top-1/4 size-[70vmax] rounded-full bg-flame/20 blur-[100px]"
         animate={reduce ? undefined : { x: ['0%', '18%', '0%'], y: ['0%', '12%', '0%'] }}
         transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute -bottom-1/3 -right-1/4 size-[65vmax] rounded-full bg-cyan/15 blur-[110px]"
+        className="absolute -bottom-1/3 -right-1/4 size-[65vmax] rounded-full bg-gold/15 blur-[110px]"
         animate={reduce ? undefined : { x: ['0%', '-15%', '0%'], y: ['0%', '-10%', '0%'] }}
         transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
       />

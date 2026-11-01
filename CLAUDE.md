@@ -31,7 +31,7 @@ Vite + React + TS (strict) · Tailwind v4 via @tailwindcss/vite · motion (impor
 
 ## Conventions
 - Feature folders: `src/features/{auth,profile,queue,admin}`, shared UI in `src/components/ui`, `@/` alias → `src/`.
-- Dark neon theme tokens in `src/index.css` (`night-*`, `pink`, `cyan`, `violet`, `ink*`). Primary buttons use dark text on pink for AA contrast. Min 44px tap targets, works from 320px.
+- Dark red & gold theme tokens in `src/index.css` (`night-*`, `flame` (red, primary), `gold` (yellow, accent), `ember` (orange, gradient middle), `ink*`). Primary buttons use dark text on flame for AA contrast. Min 44px tap targets, works from 320px.
 - `MotionConfig reducedMotion="user"` is set globally in `src/app/providers.tsx`.
 - Formatting: `.oxfmtrc.json` (single quotes, no semicolons, width 140). Run `npx oxfmt <paths>` only on files you touched.
 - Public `/privacy` and `/terms` (`src/features/legal`) are linked from Google's OAuth Branding page; contact email comes from `VITE_CONTACT_EMAIL`.

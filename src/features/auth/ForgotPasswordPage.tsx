@@ -15,7 +15,7 @@ import { AuthLayout } from './AuthLayout'
 import { forgotPasswordSchema, type ForgotPasswordValues } from './schemas'
 
 const backToLogin = (
-  <Link to="/login" className="font-semibold text-cyan-soft underline-offset-4 hover:underline">
+  <Link to="/login" className="font-semibold text-gold-soft underline-offset-4 hover:underline">
     Back to log in
   </Link>
 )
@@ -38,7 +38,11 @@ export function ForgotPasswordPage() {
     return (
       <AuthLayout
         title="Check your email"
-        subtitle={<>If an account exists for <strong className="text-ink">{getValues('email')}</strong>, a reset link is on its way.</>}
+        subtitle={
+          <>
+            If an account exists for <strong className="text-ink">{getValues('email')}</strong>, a reset link is on its way.
+          </>
+        }
         footer={backToLogin}
       >
         <motion.div variants={rise} className="flex justify-center py-2">
@@ -46,9 +50,9 @@ export function ForgotPasswordPage() {
             initial={{ x: -40, opacity: 0, rotate: -15 }}
             animate={{ x: 0, opacity: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-            className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-cyan"
+            className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-gold"
           >
-            <Send aria-hidden className="size-9 text-cyan" />
+            <Send aria-hidden className="size-9 text-gold" />
           </motion.div>
         </motion.div>
         <motion.p variants={rise} className="text-sm text-ink-muted">

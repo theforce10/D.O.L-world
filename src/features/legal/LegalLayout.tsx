@@ -38,7 +38,7 @@ export function LegalLayout({ title, updated, children }: { title: string; updat
 /** "email us at x" when a contact email is configured, otherwise a neutral fallback. */
 export function ContactLine() {
   return CONTACT_EMAIL ? (
-    <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-cyan-soft underline-offset-4 hover:underline">
+    <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-gold-soft underline-offset-4 hover:underline">
       {CONTACT_EMAIL}
     </a>
   ) : (

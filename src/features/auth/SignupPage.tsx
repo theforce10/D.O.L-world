@@ -26,15 +26,22 @@ function CheckYourEmail({ email }: { email: string }) {
   })
 
   return (
-    <AuthLayout title="Check your email" subtitle={<>We sent a confirmation link to <strong className="text-ink">{email}</strong>. Tap it to finish signing up.</>}>
+    <AuthLayout
+      title="Check your email"
+      subtitle={
+        <>
+          We sent a confirmation link to <strong className="text-ink">{email}</strong>. Tap it to finish signing up.
+        </>
+      }
+    >
       <motion.div variants={rise} className="flex justify-center py-2">
         <motion.div
           initial={{ scale: 0.5, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 260, damping: 14 }}
-          className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-cyan"
+          className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-gold"
         >
-          <MailCheck aria-hidden className="size-10 text-cyan" />
+          <MailCheck aria-hidden className="size-10 text-gold" />
         </motion.div>
       </motion.div>
       <motion.p variants={rise} className="text-sm text-ink-muted">
@@ -81,7 +88,10 @@ export function SignupPage() {
       footer={
         <>
           Already have an account?{' '}
-          <Link to={`/login${params.get('next') ? `?next=${encodeURIComponent(next)}` : ''}`} className="font-semibold text-cyan-soft underline-offset-4 hover:underline">
+          <Link
+            to={`/login${params.get('next') ? `?next=${encodeURIComponent(next)}` : ''}`}
+            className="font-semibold text-gold-soft underline-offset-4 hover:underline"
+          >
             Log in
           </Link>
         </>

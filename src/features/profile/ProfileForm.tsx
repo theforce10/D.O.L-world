@@ -102,7 +102,7 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
                 href="/privacy"
                 target="_blank"
                 rel="noreferrer"
-                className="font-semibold text-cyan-soft underline-offset-4 hover:underline"
+                className="font-semibold text-gold-soft underline-offset-4 hover:underline"
               >
                 How we use your details
               </a>
