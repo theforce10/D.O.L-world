@@ -1,14 +1,3 @@
-// Emails the admin(s) whenever an attendee submits a song.
-//
-// Called by a Supabase Database Webhook on INSERT into public.song_requests.
-// The webhook sends an `x-webhook-secret` header; anything without the right
-// value is rejected, so the public URL can't be used to spam the admin inbox.
-// Deployed with --no-verify-jwt because the webhook doesn't send a user JWT.
-//
-// Secrets (supabase secrets set …): RESEND_API_KEY, ADMIN_EMAIL, WEBHOOK_SECRET,
-// optional EMAIL_FROM, APP_URL, BRAND. SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
-// are provided automatically.
-
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0'
 
 interface SongRequestRecord {
@@ -38,7 +27,6 @@ const ADMIN_EMAILS = env('ADMIN_EMAIL')
   .map((e) => e.trim())
   .filter(Boolean)
 const BRAND = env('BRAND') || 'DOL World'
-// onboarding@resend.dev works without a domain, but only delivers to the Resend account's own email.
 const EMAIL_FROM = env('EMAIL_FROM') || `${BRAND} <onboarding@resend.dev>`
 const APP_URL = env('APP_URL').replace(/\/+$/, '')
 
@@ -49,7 +37,6 @@ const admin = createClient(env('SUPABASE_URL'), env('SUPABASE_SERVICE_ROLE_KEY')
 const json = (status: number, body: Record<string, unknown>) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
 
-/** Compares secrets in constant time (hashing first makes the lengths equal). */
 async function secretMatches(given: string | null): Promise<boolean> {
   if (!given || !WEBHOOK_SECRET) return false
   const enc = new TextEncoder()
@@ -136,7 +123,6 @@ Deno.serve(async (req) => {
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
       'Content-Type': 'application/json',
-      // If the webhook retries, Resend won't send the same email twice.
       'Idempotency-Key': `song-request-${song.id}`,
     },
     body: JSON.stringify({ from: EMAIL_FROM, to: ADMIN_EMAILS, subject, text, html, reply_to: profile?.email ?? undefined }),

@@ -15,7 +15,16 @@ import { downloadCsv, slugify, toCsv, type CsvColumn } from '@/lib/csv'
 import type { RequestStatus } from '@/lib/types'
 import { errorMessage } from '@/lib/utils'
 import { statusMeta } from '@/features/queue/status'
-import { useCallNext, useEventQueue, useEvents, useSetActiveEvent, useUpdateStatus, type AdminEvent, type QueueEntry } from './api'
+import {
+  useCallNext,
+  useCreateEvent,
+  useEventQueue,
+  useEvents,
+  useSetActiveEvent,
+  useUpdateStatus,
+  type AdminEvent,
+  type QueueEntry,
+} from './api'
 import { CreateEventDialog } from './CreateEventDialog'
 import { QueueList } from './QueueList'
 import { useAdminRealtime } from './useAdminRealtime'
@@ -51,7 +60,6 @@ export function AdminQueuePage() {
 
   const list = events.data ?? []
   const liveEvent = list.find((e) => e.is_active)
-  // ?event=<id> keeps the selection across refreshes; default to the live event.
   const selected = list.find((e) => e.id === params.get('event')) ?? liveEvent ?? list[0]
 
   const selectEvent = (id: string) =>
@@ -112,6 +120,7 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
   const updateStatus = useUpdateStatus(event.id)
   const callNext = useCallNext(event.id)
   const setActive = useSetActiveEvent()
+  const createEvent = useCreateEvent()
 
   const [confirm, setConfirm] = useState<'start' | 'end' | null>(null)
   const [search, setSearch] = useState('')
@@ -174,6 +183,21 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
       onError: (error) => toast.error(errorMessage(error, "Couldn't update the event.")),
     })
 
+  const hasNumbers = event.last_queue_number > 0
+
+  const startNewNight = () =>
+    createEvent.mutate(
+      { input: { name: event.name, venue: event.venue ?? undefined, event_date: new Date().toLocaleDateString('en-CA') }, goLive: true },
+      {
+        onSuccess: (id) => {
+          toast.success(`🎉 ${event.name} is live! Numbers start at #1.`)
+          setConfirm(null)
+          onSelect(id)
+        },
+        onError: (error) => toast.error(errorMessage(error, "Couldn't start a new night.")),
+      },
+    )
+
   const exportCsv = () => {
     downloadCsv(`${slugify(event.name)}-queue.csv`, toCsv(visible, csvColumns))
     toast.success(`Exported ${visible.length} ${visible.length === 1 ? 'row' : 'rows'}`)
@@ -183,7 +207,6 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
 
   return (
     <>
-      {/* Event switcher + go live / end */}
       <Card className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center">
         <div className="min-w-0 flex-1 space-y-1.5">
           <label htmlFor="event-switch" className="text-xs font-medium uppercase tracking-wider text-ink-subtle">
@@ -220,7 +243,6 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
         </div>
       </Card>
 
-      {/* Stage */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
         <StageCard label="On stage" accent="text-flame-soft" entry={singing} />
         <StageCard label="Up next" accent="text-amber" entry={upNext} />
@@ -242,7 +264,6 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
         </Button>
       </div>
 
-      {/* Toolbar */}
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
         <div className="min-w-0 flex-1 sm:min-w-64">
           <label htmlFor="queue-search" className="sr-only">
@@ -278,7 +299,6 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
         </Button>
       </div>
 
-      {/* Queue */}
       {queue.isPending ? (
         <div className="space-y-3" aria-busy>
           {[0, 1, 2].map((i) => (
@@ -311,19 +331,32 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
         title={confirm === 'end' ? `End ${event.name}?` : `Go live with ${event.name}?`}
         description={
           confirm === 'end'
-            ? 'Attendees will see "No event live" and can’t submit songs. The queue is kept, and you can go live again later.'
-            : liveEvent && liveEvent.id !== event.id
-              ? `This ends ${liveEvent.name}, which is live right now. Attendees will switch to this event.`
-              : 'Attendees can start submitting songs straight away.'
+            ? 'Attendees will see "No event live" and can’t submit songs. The queue is kept. Next time you go live you can start a new night at #1.'
+            : hasNumbers
+              ? `This event has already given out numbers up to #${event.last_queue_number}. Start a new night to begin again at #1, or carry on from #${event.last_queue_number + 1}.`
+              : liveEvent && liveEvent.id !== event.id
+                ? `This ends ${liveEvent.name}, which is live right now. Attendees will switch to this event.`
+                : 'Attendees can start submitting songs straight away.'
         }
       >
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button variant="ghost" onClick={() => setConfirm(null)}>
             Cancel
           </Button>
-          <Button variant={confirm === 'end' ? 'danger' : 'primary'} loading={setActive.isPending} onClick={runSetActive}>
-            {confirm === 'end' ? 'End event' : 'Go live'}
-          </Button>
+          {confirm === 'start' && hasNumbers ? (
+            <>
+              <Button variant="secondary" loading={setActive.isPending} disabled={createEvent.isPending} onClick={runSetActive}>
+                Carry on from #{event.last_queue_number + 1}
+              </Button>
+              <Button loading={createEvent.isPending} disabled={setActive.isPending} onClick={startNewNight}>
+                Start new night at #1
+              </Button>
+            </>
+          ) : (
+            <Button variant={confirm === 'end' ? 'danger' : 'primary'} loading={setActive.isPending} onClick={runSetActive}>
+              {confirm === 'end' ? 'End event' : 'Go live'}
+            </Button>
+          )}
         </div>
       </Dialog>
     </>

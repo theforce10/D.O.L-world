@@ -2,13 +2,11 @@ import { MicOff } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Card } from '@/components/ui/Card'
 
-/** Shown when no event is active. The page flips to the song form by itself when an admin goes live. */
 export function NoEventState() {
   const reduce = useReducedMotion()
 
   return (
     <Card className="relative overflow-hidden text-center">
-      {/* A dim spotlight sweeping an empty stage. */}
       {!reduce && (
         <motion.div
           aria-hidden

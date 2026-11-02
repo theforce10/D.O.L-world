@@ -2,7 +2,6 @@ import { ChevronDown } from 'lucide-react'
 import { forwardRef, type SelectHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
-/** Native select (best picker on phones) with the app's input styling. */
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(function Select(
   { className, children, ...props },
   ref,

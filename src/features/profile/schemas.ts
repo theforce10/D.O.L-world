@@ -11,7 +11,6 @@ export const profileSchema = z.object({
   marketing_consent: z.boolean(),
 })
 
-// Consent is required to finish onboarding (it can be withdrawn later on /profile).
 export const onboardingSchema = profileSchema.extend({
   marketing_consent: z.boolean().refine((v) => v, 'Please tick this box to continue'),
 })

@@ -7,13 +7,11 @@ const notes = [
   { Icon: Music2, x: 30, delay: 2.2, color: 'text-ember' },
 ]
 
-/** Hero microphone: gentle sway, pulsing sound rings, floating notes. Static under reduced motion. */
 export function AnimatedMic() {
   const reduce = useReducedMotion()
 
   return (
     <div aria-hidden className="relative mx-auto grid size-56 place-items-center sm:size-64">
-      {/* Sound rings */}
       {!reduce &&
         [0, 1, 2].map((i) => (
           <motion.span
@@ -25,7 +23,6 @@ export function AnimatedMic() {
           />
         ))}
 
-      {/* Floating notes */}
       {!reduce &&
         notes.map(({ Icon, x, delay, color }, i) => (
           <motion.span
@@ -39,7 +36,6 @@ export function AnimatedMic() {
           </motion.span>
         ))}
 
-      {/* Microphone */}
       <motion.svg
         viewBox="0 0 120 160"
         className="relative w-28 drop-shadow-[0_0_24px_rgb(255_61_46/0.55)] sm:w-32"

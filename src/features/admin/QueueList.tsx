@@ -72,7 +72,6 @@ interface QueueListProps {
 export function QueueList({ entries, onStatusChange, pendingId }: QueueListProps) {
   return (
     <>
-      {/* Phones: one card per singer. */}
       <ul className="space-y-3 md:hidden">
         <AnimatePresence initial={false}>
           {entries.map((entry) => (
@@ -111,7 +110,6 @@ export function QueueList({ entries, onStatusChange, pendingId }: QueueListProps
         </AnimatePresence>
       </ul>
 
-      {/* Tablets and up: a table. */}
       <div className="hidden overflow-hidden rounded-3xl border border-white/10 bg-night-800/70 shadow-card md:block">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-white/10 text-xs uppercase tracking-wider text-ink-subtle">

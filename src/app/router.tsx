@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router'
+import { FullPageSpinner } from '@/components/ui/States'
 import { RequireAdmin } from '@/features/admin/RequireAdmin'
 import { GuestOnly, RequireAuth, RequireProfile } from '@/features/auth/guards'
 import { HomeRoute } from './HomeRoute'
@@ -8,6 +9,7 @@ import { RootLayout } from './RootLayout'
 export const router = createBrowserRouter([
   {
     element: <RootLayout />,
+    hydrateFallbackElement: <FullPageSpinner />,
     children: [
       { path: '/', element: <HomeRoute /> },
       {
@@ -30,7 +32,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      // Not guest-only: the reset link signs the user in before this page renders.
       {
         path: '/reset-password',
         lazy: () =>
@@ -90,7 +91,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      // Public: Google's OAuth consent screen links to these.
       { path: '/privacy', lazy: () => import('@/features/legal/PrivacyPage').then((m) => ({ Component: m.PrivacyPage })) },
       { path: '/terms', lazy: () => import('@/features/legal/TermsPage').then((m) => ({ Component: m.TermsPage })) },
       { path: '*', element: <NotFoundPage /> },

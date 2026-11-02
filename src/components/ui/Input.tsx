@@ -9,7 +9,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   trailing?: ReactNode
 }
 
-// text-base (16px) keeps iOS Safari from zooming into inputs.
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ className, icon, trailing, ...props }, ref) {
   return (
     <div className="relative">

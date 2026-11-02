@@ -10,10 +10,8 @@ export const adminKeys = {
   contacts: ['admin', 'contacts'] as const,
 }
 
-// Same safety net as the attendee page: realtime first, polling if the socket drops.
 const FALLBACK_POLL_MS = 30_000
 
-/** Asks the database (is_admin() reads the admins table). RLS enforces it again on every admin query. */
 export function useIsAdmin() {
   const { user } = useAuth()
   return useQuery({
@@ -75,12 +73,10 @@ export function useCreateEvent() {
   })
 }
 
-/** Pass null to end the live event. Starting one ends any other in the same transaction. */
 export function useSetActiveEvent() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (eventId: string | null) => {
-      // The generator types the uuid argument as non-null; the function accepts null on purpose.
       const { error } = await supabase.rpc('set_active_event', { p_event_id: eventId as string })
       if (error) throw error
     },
@@ -121,8 +117,6 @@ export function useUpdateStatus(eventId: string | undefined) {
       const { error } = await supabase.from('song_requests').update({ status }).eq('id', id)
       if (error) throw error
     },
-    // Show the change instantly; the refetch afterwards picks up anything the
-    // database trigger changed too (e.g. the previous singer becoming "sung").
     onMutate: async ({ id, status }) => {
       await queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<QueueEntry[]>(key)
@@ -139,14 +133,12 @@ export function useUpdateStatus(eventId: string | undefined) {
   })
 }
 
-/** Finishes the current singer, puts the next one on stage and marks the one after as up next. */
 export function useCallNext(eventId: string | undefined) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async () => {
       const { data, error } = await supabase.rpc('call_next', { p_event_id: eventId! })
       if (error) throw error
-      // null when nobody is left in the queue.
       return data as number | null
     },
     onSettled: () => {

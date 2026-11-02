@@ -14,7 +14,6 @@ export interface Ticket {
   eventName: string
 }
 
-/** Full-screen ticket: spring scale-in, confetti burst, number counting up. */
 export function TicketReveal({ ticket, name, celebrate, onClose }: Omit<TicketDialogProps, 'ticket'> & { ticket: Ticket | null }) {
   return createPortal(
     <AnimatePresence>{ticket && <TicketDialog ticket={ticket} name={name} celebrate={celebrate} onClose={onClose} />}</AnimatePresence>,
@@ -100,7 +99,6 @@ function TicketDialog({ ticket, name, celebrate, onClose }: TicketDialogProps) {
               #<CountUp value={ticket.queue_number} delay={0.2} />
             </motion.p>
 
-            {/* Perforation */}
             <div aria-hidden className="relative -mx-6 my-5 border-t-2 border-dashed border-white/15">
               <span className="absolute -left-3 -top-3 size-6 rounded-full bg-night-950" />
               <span className="absolute -right-3 -top-3 size-6 rounded-full bg-night-950" />

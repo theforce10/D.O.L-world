@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useLocation, useOutlet } from 'react-router'
 import { SpotlightBg } from '@/components/ui/SpotlightBg'
 
-// Keeps the outgoing page rendered while it animates out.
 function FrozenOutlet() {
   const outlet = useOutlet()
   const [frozen] = useState(outlet)

@@ -26,7 +26,6 @@ export function useProfile() {
   })
 }
 
-/** Only the columns the database lets users edit (see column grants in the profiles migration). */
 export type ProfileUpdate = Partial<Pick<Profile, 'full_name' | 'phone' | 'avatar_url' | 'marketing_consent'>>
 
 export function useUpdateProfile() {
@@ -42,7 +41,6 @@ export function useUpdateProfile() {
   })
 }
 
-/** Resizes, uploads to avatars/<uid>/avatar.webp, and saves the public URL on the profile. */
 export function useUploadAvatar() {
   const { user } = useAuth()
   const update = useUpdateProfile()
@@ -56,7 +54,6 @@ export function useUploadAvatar() {
         .upload(path, blob, { upsert: true, contentType: 'image/webp', cacheControl: '3600' })
       if (error) throw error
       const { data } = supabase.storage.from('avatars').getPublicUrl(path)
-      // Version the URL so browsers/CDN show the new photo immediately.
       return update.mutateAsync({ avatar_url: `${data.publicUrl}?v=${Date.now()}` })
     },
   })

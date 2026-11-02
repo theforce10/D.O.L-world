@@ -17,12 +17,13 @@ import { ProfileForm } from './ProfileForm'
 
 export function ProfilePage() {
   const navigate = useNavigate()
-  // Rendered behind RequireProfile, so the profile is already cached (briefly empty during logout).
   const { data: profile } = useProfile()
   const update = useUpdateProfile()
   const logout = useMutation({
-    mutationFn: signOut,
-    onSuccess: () => navigate('/', { replace: true }),
+    mutationFn: async () => {
+      await navigate('/', { replace: true })
+      await signOut()
+    },
     onError: (error) => toast.error(errorMessage(error)),
   })
 
@@ -52,7 +53,6 @@ export function ProfilePage() {
               )}
             </div>
             <ProfileForm
-              // Remount after each save so the form's "unchanged" baseline is the saved data.
               key={profile.updated_at}
               profile={profile}
               mode="edit"

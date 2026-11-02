@@ -11,7 +11,6 @@ interface DialogProps {
   children: ReactNode
 }
 
-/** Modal sheet: slides up from the bottom on phones, centred card on larger screens. Escape / backdrop closes. */
 export function Dialog({ open, onClose, ...rest }: DialogProps) {
   return createPortal(<AnimatePresence>{open && <DialogPanel onClose={onClose} {...rest} />}</AnimatePresence>, document.body)
 }
@@ -22,7 +21,6 @@ function DialogPanel({ onClose, title, description, children }: Omit<DialogProps
 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null
-    // Focus the first field (or button) inside, falling back to the panel itself.
     const first = panelRef.current?.querySelector<HTMLElement>('input, select, textarea, button:not([data-close])')
     ;(first ?? panelRef.current)?.focus()
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()

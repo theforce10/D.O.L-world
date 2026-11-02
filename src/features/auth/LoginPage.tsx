@@ -28,7 +28,6 @@ export function LoginPage() {
     formState: { errors },
   } = useForm<LoginValues>({ resolver: zodResolver(loginSchema), defaultValues: { email: '', password: '' } })
 
-  // On success GuestOnly sees the new session and redirects to `next`.
   const login = useMutation({
     mutationFn: (values: LoginValues) => signInWithPassword(values.email, values.password),
     onError: (error) => toast.error(authErrorMessage(error)),

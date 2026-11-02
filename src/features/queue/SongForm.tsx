@@ -27,7 +27,6 @@ export function SongForm({ submitting, onSubmit }: { submitting: boolean; onSubm
 
   return (
     <Card className="relative overflow-hidden">
-      {/* Slow-spinning record in the corner for a bit of stage flavour. */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute -right-10 -top-10 text-night-600"
@@ -37,7 +36,14 @@ export function SongForm({ submitting, onSubmit }: { submitting: boolean; onSubm
         <Disc3 className="size-40" strokeWidth={1} />
       </motion.div>
 
-      <motion.form variants={stagger} initial="hidden" animate="show" noValidate onSubmit={handleSubmit(onSubmit)} className="relative space-y-5">
+      <motion.form
+        variants={stagger}
+        initial="hidden"
+        animate="show"
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="relative space-y-5"
+      >
         <motion.div variants={rise} className="space-y-1">
           <h2 className="text-3xl font-extrabold sm:text-4xl">
             Pick your <span className="text-gradient">song</span>
@@ -89,7 +95,6 @@ export function SongForm({ submitting, onSubmit }: { submitting: boolean; onSubm
           </Field>
         </motion.div>
 
-        {/* Sticky on phones so the button is always within thumb reach. */}
         <motion.div
           variants={rise}
           className="sticky bottom-0 -mx-5 bg-gradient-to-t from-night-800 via-night-800/95 to-transparent px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:static sm:mx-0 sm:bg-none sm:p-0"

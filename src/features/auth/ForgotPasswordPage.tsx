@@ -34,7 +34,6 @@ export function ForgotPasswordPage() {
   })
 
   if (reset.isSuccess) {
-    // Same message whether or not the account exists, so emails can't be probed.
     return (
       <AuthLayout
         title="Check your email"

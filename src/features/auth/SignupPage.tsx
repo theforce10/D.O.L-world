@@ -73,7 +73,6 @@ export function SignupPage() {
   const signup = useMutation({
     mutationFn: signUp,
     onSuccess: (signedIn, values) => {
-      // If email confirmation is on there's no session yet; otherwise GuestOnly redirects automatically.
       if (!signedIn) setPendingEmail(values.email)
     },
     onError: (error) => toast.error(authErrorMessage(error)),

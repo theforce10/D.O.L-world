@@ -4,7 +4,6 @@ import { RequireProfile } from '@/features/auth/guards'
 import { HomePage } from '@/features/queue/HomePage'
 import { LandingPage } from '@/features/queue/LandingPage'
 
-/** "/" is the landing page for visitors and the song picker for signed-in attendees. */
 export function HomeRoute() {
   const { session, loading } = useAuth()
   if (loading) return <FullPageSpinner />

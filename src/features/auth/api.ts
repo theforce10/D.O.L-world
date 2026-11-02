@@ -2,7 +2,6 @@ import { absoluteUrl } from '@/lib/navigation'
 import { supabase } from '@/lib/supabase'
 import { errorMessage } from '@/lib/utils'
 
-/** Supabase's auth errors, reworded for people at a karaoke night. */
 export function authErrorMessage(error: unknown): string {
   const message = errorMessage(error)
   if (/invalid login credentials/i.test(message)) return 'Wrong email or password.'
@@ -28,7 +27,6 @@ export async function signInWithPassword(email: string, password: string) {
   if (error) throw error
 }
 
-/** Returns true if the user is signed in straight away, false if they must confirm their email first. */
 export async function signUp({ fullName, email, password }: { fullName: string; email: string; password: string }) {
   const { data, error } = await supabase.auth.signUp({
     email,

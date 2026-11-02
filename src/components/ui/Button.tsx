@@ -13,7 +13,6 @@ const variants: Record<Variant, string> = {
   danger: 'border border-danger/50 bg-danger/10 text-danger hover:bg-danger/20',
 }
 
-// Every size keeps a 44px minimum tap target.
 const sizes: Record<Size, string> = {
   sm: 'min-h-11 px-3.5 text-sm gap-1.5 rounded-xl',
   md: 'min-h-12 px-5 text-base gap-2 rounded-2xl',

@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 import { BRAND } from '@/lib/brand'
 import { cn } from '@/lib/utils'
 
-/** `compact` hides the name below 400px wide, for headers with several buttons. */
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <Link

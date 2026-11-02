@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { cn } from '@/lib/utils'
 
-/** Slot-machine style swap whenever the value changes. */
 export function AnimatedNumber({ value, className }: { value: number | string; className?: string }) {
   return (
     <span className={cn('relative inline-flex overflow-hidden tabular-nums', className)}>

@@ -4,10 +4,6 @@ import { errorMessage } from '@/lib/utils'
 import { NotFoundPage } from '@/app/NotFoundPage'
 import { useIsAdmin } from './api'
 
-/**
- * Non-admins get the normal 404 so the admin area isn't advertised.
- * This is only UX: the database refuses admin reads and writes for everyone else anyway.
- */
 export function RequireAdmin() {
   const isAdmin = useIsAdmin()
   if (isAdmin.isPending) return <FullPageSpinner label="Checking access" />

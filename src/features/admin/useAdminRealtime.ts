@@ -5,10 +5,6 @@ import { supabase } from '@/lib/supabase'
 import type { SongRequest } from '@/lib/types'
 import { adminKeys } from './api'
 
-/**
- * Live admin queue. Admins can read every row (RLS), so they get each insert and
- * status change for the selected event, plus event changes from other admins.
- */
 export function useAdminRealtime(eventId: string | undefined) {
   const queryClient = useQueryClient()
 

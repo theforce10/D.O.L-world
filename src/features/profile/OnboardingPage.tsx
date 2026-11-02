@@ -25,7 +25,6 @@ export function OnboardingPage() {
       </div>
     )
   }
-  // Already done (or just finished): carry on to wherever they were heading.
   if (isProfileComplete(profile.data)) return <Navigate to={next} replace />
 
   const firstName = profile.data.full_name?.split(' ')[0]

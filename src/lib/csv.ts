@@ -3,9 +3,6 @@ export interface CsvColumn<T> {
   value: (row: T) => string | number | boolean | null | undefined
 }
 
-// Spreadsheet apps run cells starting with these as formulas ("CSV injection").
-// Names, songs and notes are typed by attendees, so neutralise them with a leading quote.
-// A bare phone number like +2348012345678 is left alone: it can't do anything as a formula.
 const FORMULA_START = /^[=+\-@\t\r]/
 const PHONE = /^\+\d+$/
 
@@ -22,7 +19,6 @@ export function toCsv<T>(rows: readonly T[], columns: readonly CsvColumn<T>[]): 
   return lines.join('\r\n')
 }
 
-/** Saves a CSV in the browser. The BOM makes Excel read names with accents or emoji correctly. */
 export function downloadCsv(filename: string, csv: string) {
   const url = URL.createObjectURL(new Blob(['\uFEFF', csv], { type: 'text/csv;charset=utf-8' }))
   const link = document.createElement('a')

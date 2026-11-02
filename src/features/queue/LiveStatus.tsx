@@ -82,7 +82,6 @@ export function LiveStatus({ status, onShowTicket }: { status: QueueStatus; onSh
           exit={{ opacity: 0, y: -6 }}
           className="text-center text-lg font-semibold"
         >
-          {/* "Now singing: #12 · You're #17 · 5 ahead of you" as one sentence for screen readers. */}
           <span className="sr-only">
             Now singing: {status.current_number > 0 ? `#${status.current_number}` : 'nobody yet'}.{' '}
             {inPlay && mine ? `You're #${mine}.` : ''}{' '}
@@ -104,7 +103,6 @@ export function LiveStatus({ status, onShowTicket }: { status: QueueStatus; onSh
   )
 }
 
-/** Big pulsing banner when the user is up next or on stage. */
 export function UpNextAlert({ status }: { status: QueueStatus }) {
   const show = status.my_status === 'up_next' || status.my_status === 'singing'
   const onStage = status.my_status === 'singing'

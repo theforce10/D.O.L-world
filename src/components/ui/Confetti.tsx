@@ -18,7 +18,7 @@ interface Piece {
 
 function makePieces(count: number): Piece[] {
   return Array.from({ length: count }, (_, id) => {
-    const angle = Math.random() * Math.PI - Math.PI // upward half-circle
+    const angle = Math.random() * Math.PI - Math.PI
     const power = 140 + Math.random() * 220
     return {
       id,
@@ -35,7 +35,6 @@ function makePieces(count: number): Piece[] {
   })
 }
 
-/** One-shot confetti burst from the centre of its (relative) parent. Renders nothing under reduced motion. */
 export function Confetti({ count = 70 }: { count?: number }) {
   const reduce = useReducedMotion()
   const [pieces] = useState(() => makePieces(count))

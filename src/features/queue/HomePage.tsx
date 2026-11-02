@@ -27,15 +27,14 @@ const section = {
   transition: { type: 'spring' as const, stiffness: 260, damping: 26 },
 }
 
-/** Toast + vibration when the user's own song moves to "up next" or "on stage". */
 function useTurnNotifications(myStatus: RequestStatus | null | undefined, myNumber: number | null | undefined) {
   const previous = useRef<RequestStatus | null | undefined>(undefined)
 
   useEffect(() => {
-    if (myStatus === undefined) return // still loading
+    if (myStatus === undefined) return
     const before = previous.current
     previous.current = myStatus
-    if (before === undefined || before === myStatus) return // first load or no change
+    if (before === undefined || before === myStatus) return
 
     if (myStatus === 'up_next') {
       toast(`🔔 You're up next, #${myNumber}!`, { description: 'Head to the stage and get ready.', duration: 10_000 })
@@ -175,7 +174,6 @@ export function HomePage() {
                             },
                             onError: (error) => {
                               toast.error(errorMessage(error, "Couldn't record your song. Please try again."))
-                              // The event may have just ended or the user already has a song: resync.
                               void queryClient.invalidateQueries({ queryKey: queueKeys.activeEvent })
                               void queryClient.invalidateQueries({ queryKey: ['queue'] })
                             },

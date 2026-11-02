@@ -16,7 +16,6 @@ import { AuthLayout } from './AuthLayout'
 import { useAuth } from './AuthProvider'
 import { resetPasswordSchema, type ResetPasswordValues } from './schemas'
 
-/** Supabase puts link errors (expired, already used) in the URL hash. */
 function readLinkError(): string | null {
   const hash = new URLSearchParams(window.location.hash.slice(1))
   const query = new URLSearchParams(window.location.search)

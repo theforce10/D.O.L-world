@@ -6,7 +6,6 @@ interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
   label: ReactNode
 }
 
-/** Native checkbox (keyboard + screen-reader friendly) with a custom neon box. The whole row is the tap target. */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox({ id, label, className, ...props }, ref) {
   return (
     <label

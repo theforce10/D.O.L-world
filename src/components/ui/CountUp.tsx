@@ -1,7 +1,6 @@
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react'
 import { useEffect } from 'react'
 
-/** Counts from 0 up to `value` with an ease-out. Screen readers get the final value straight away. */
 export function CountUp({
   value,
   duration = 1.2,

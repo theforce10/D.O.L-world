@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-/* Red & gold karaoke night palette. All text colours below meet WCAG AA on night-900. */
 @theme {
   --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;

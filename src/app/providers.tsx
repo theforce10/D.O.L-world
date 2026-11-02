@@ -9,7 +9,6 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {/* reducedMotion="user": transforms are dropped for people who ask for less motion; opacity fades remain. */}
         <MotionConfig reducedMotion="user">
           {children}
           <Toaster

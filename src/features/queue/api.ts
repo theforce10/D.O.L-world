@@ -11,8 +11,6 @@ export const queueKeys = {
   mine: (eventId: string | undefined, userId: string | undefined) => ['queue', 'mine', eventId, userId] as const,
 }
 
-// Realtime is the main update channel; polling is a safety net for phones that
-// drop the websocket when the screen locks.
 const FALLBACK_POLL_MS = 30_000
 
 export function useActiveEvent() {
@@ -31,7 +29,6 @@ export function useActiveEvent() {
   })
 }
 
-/** Now singing / my number / how many ahead. Numbers and counts only (see get_queue_status). */
 export function useQueueStatus(eventId: string | undefined) {
   return useQuery({
     queryKey: queueKeys.status(eventId),
@@ -45,7 +42,6 @@ export function useQueueStatus(eventId: string | undefined) {
   })
 }
 
-/** The signed-in user's song for this event that's still in play (waiting / up next / on stage). */
 export function useMyActiveRequest(eventId: string | undefined) {
   const { user } = useAuth()
   return useQuery({
@@ -67,11 +63,6 @@ export function useMyActiveRequest(eventId: string | undefined) {
 
 type SongRequestInsert = Database['public']['Tables']['song_requests']['Insert']
 
-/**
- * The only columns clients are granted INSERT on. user_id, queue_number and status
- * are required by the generated Insert type but are always set by the
- * assign_queue_number() trigger, so the client must not (and cannot) send them.
- */
 type ClientSongInsert = Pick<SongRequestInsert, 'event_id' | 'song_title' | 'artist' | 'note'>
 
 export interface SongInput {
@@ -85,8 +76,6 @@ export function useSubmitSong(eventId: string | undefined) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (input: SongInput) => {
-      // Only these four columns are insertable; the database assigns queue_number,
-      // status and user_id in a BEFORE INSERT trigger.
       const { data, error } = await supabase
         .from('song_requests')
         .insert({

@@ -19,14 +19,7 @@ export function Avatar({ src, name, className }: { src?: string | null; name?: s
       )}
     >
       {showImage ? (
-        <img
-          src={src}
-          alt=""
-          // Google profile photos can 403 when a referrer is sent.
-          referrerPolicy="no-referrer"
-          onError={() => setFailed(src)}
-          className="size-full object-cover"
-        />
+        <img src={src} alt="" referrerPolicy="no-referrer" onError={() => setFailed(src)} className="size-full object-cover" />
       ) : (
         <span aria-hidden>{initials(name)}</span>
       )}

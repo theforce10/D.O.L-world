@@ -1,7 +1,3 @@
-/**
- * Downscales an image in the browser so avatar uploads stay small on venue mobile data
- * (and well under the bucket's 2 MB limit). Returns a square-cropped WebP.
- */
 export async function resizeToSquareWebp(file: File, size = 512, quality = 0.85): Promise<Blob> {
   const bitmap = await createImageBitmap(file)
   const side = Math.min(bitmap.width, bitmap.height)

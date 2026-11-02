@@ -13,7 +13,6 @@ interface FieldProps {
   children: ReactNode
 }
 
-/** Label + control + hint + animated inline error. Pass `aria-describedby={describedBy(id, …)}` to the control. */
 export function Field({ id, label, error, hint, optional, className, children }: FieldProps) {
   return (
     <div className={cn('space-y-1.5', className)}>

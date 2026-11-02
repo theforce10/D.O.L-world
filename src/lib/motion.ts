@@ -1,4 +1,3 @@
-/** Shared motion variants: a parent with `stagger` reveals `rise` children one after another. */
 export const stagger = {
   hidden: {},
   show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },

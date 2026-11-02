@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Phone, User } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Field } from '@/components/ui/Field'
@@ -24,7 +24,6 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isDirty },
   } = useForm<ProfileFormInput, unknown, ProfileFormValues>({
     resolver: zodResolver(mode === 'onboarding' ? onboardingSchema : profileSchema),
@@ -32,13 +31,9 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
     defaultValues: {
       full_name: profile.full_name ?? '',
       phone: profile.phone ? formatPhone(profile.phone) : '',
-      // Unchecked by default at onboarding, as required.
       marketing_consent: mode === 'onboarding' ? false : profile.marketing_consent,
     },
   })
-
-  const phone = useWatch({ control, name: 'phone' })
-  const phonePreview = phone && !phone.trim().startsWith('+') ? toE164(phone) : null
 
   return (
     <motion.form
@@ -66,15 +61,7 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
           id="phone"
           label="Phone number"
           error={errors.phone?.message}
-          hint={
-            phonePreview ? (
-              <>
-                We'll save it as <span className="font-medium text-ink">{formatPhone(phonePreview)}</span>
-              </>
-            ) : (
-              'Nigerian numbers can start with 0. Others need a + and country code.'
-            )
-          }
+          hint="Nigerian numbers can start with 0. Others need a + and country code."
         >
           <Input
             id="phone"
@@ -97,15 +84,7 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
           aria-describedby={describedBy('marketing_consent', { error: errors.marketing_consent })}
           label={
             <>
-              I agree that {BRAND} may contact me about future events and promotions. {/* New tab so a half-filled form isn't lost. */}
-              <a
-                href="/privacy"
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-gold-soft underline-offset-4 hover:underline"
-              >
-                How we use your details
-              </a>
+              I agree that {BRAND} may contact me about future events and promotions.
               {mode === 'edit' && <span className="mt-1 block text-ink-muted">Untick any time to stop hearing from us.</span>}
             </>
           }
@@ -118,7 +97,6 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
         )}
       </motion.div>
 
-      {/* Sticky on phones so the button is always reachable above the keyboard. */}
       <motion.div
         variants={rise}
         className="sticky bottom-0 -mx-5 bg-gradient-to-t from-night-800 via-night-800/95 to-transparent px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:static sm:mx-0 sm:bg-none sm:p-0"
