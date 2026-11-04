@@ -1,12 +1,21 @@
+import { AuthError } from '@supabase/supabase-js'
 import { absoluteUrl } from '@/lib/navigation'
 import { supabase } from '@/lib/supabase'
 import { errorMessage } from '@/lib/utils'
 
 export function authErrorMessage(error: unknown): string {
   const message = errorMessage(error)
+  const code = error instanceof AuthError ? error.code : undefined
+  if (code === 'over_email_send_rate_limit')
+    return "We can't send sign-up emails right now. Please use Continue with Google, or try again later."
+  if (code === 'over_request_rate_limit') return 'Lots of people are signing up right now. Please wait a minute and try again.'
+  if (code === 'email_address_not_authorized')
+    return "We can't send emails to this address yet. Please use Continue with Google, or ask the host for help."
   if (/invalid login credentials/i.test(message)) return 'Wrong email or password.'
   if (/email not confirmed/i.test(message)) return 'Please confirm your email first. Check your inbox (and spam).'
   if (/user already registered/i.test(message)) return 'An account with this email already exists. Try logging in.'
+  if (/email rate limit/i.test(message))
+    return "We can't send sign-up emails right now. Please use Continue with Google, or try again later."
   if (/rate limit|too many requests/i.test(message)) return 'Too many attempts. Please wait a minute and try again.'
   if (/should be different/i.test(message)) return 'Your new password must be different from the old one.'
   if (/provider is not enabled/i.test(message)) return 'Google sign-in is not set up yet. Use email and password for now.'

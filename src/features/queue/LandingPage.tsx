@@ -18,9 +18,17 @@ export function LandingPage() {
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col px-4 pb-10 pt-[max(0.5rem,env(safe-area-inset-top))]">
       <header className="flex items-center justify-between py-2">
         <Logo />
-        <Link to="/login" className="inline-flex min-h-11 items-center rounded-xl px-3 font-semibold text-gold-soft hover:text-gold">
-          Log in
-        </Link>
+        <nav className="flex items-center gap-1">
+          <Link to="/login" className="inline-flex min-h-11 items-center rounded-xl px-3 font-semibold text-gold-soft hover:text-gold">
+            Log in
+          </Link>
+          <Link
+            to="/signup"
+            className="inline-flex min-h-11 items-center rounded-xl bg-[linear-gradient(110deg,var(--color-flame),var(--color-ember))] px-4 font-semibold text-night-950 hover:brightness-110"
+          >
+            Sign up
+          </Link>
+        </nav>
       </header>
 
       <motion.section
@@ -42,14 +50,14 @@ export function LandingPage() {
               to="/signup"
               className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(110deg,var(--color-flame),var(--color-ember))] px-7 text-lg font-semibold text-night-950 shadow-glow-flame hover:brightness-110"
             >
-              <Mic aria-hidden className="size-5" /> Get my number
+              <Mic aria-hidden className="size-5" /> Sign up to get my number
             </Link>
           </motion.div>
           <Link
             to="/login"
             className="flex min-h-12 items-center justify-center rounded-2xl border border-white/15 font-semibold text-ink hover:border-gold/60"
           >
-            I already have an account
+            I already have an account · Log in
           </Link>
         </motion.div>
 
