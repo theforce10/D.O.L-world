@@ -1,4 +1,4 @@
-import { House, ListMusic, Users } from 'lucide-react'
+import { CalendarDays, Flag, House, Users } from 'lucide-react'
 import { NavLink, Outlet } from 'react-router'
 import { Avatar } from '@/components/ui/Avatar'
 import { Logo } from '@/components/ui/Logo'
@@ -7,8 +7,9 @@ import { useProfile } from '@/features/profile/api'
 
 const tabs = [
   { to: '/', label: 'Home', icon: House, end: true },
-  { to: '/admin', label: 'Queue', icon: ListMusic, end: true },
+  { to: '/admin', label: 'Events', icon: CalendarDays, end: true },
   { to: '/admin/contacts', label: 'Contacts', icon: Users, end: false },
+  { to: '/admin/reports', label: 'Reports', icon: Flag, end: false },
 ]
 
 export function AdminLayout() {
@@ -19,8 +20,10 @@ export function AdminLayout() {
       <header className="sticky top-0 z-30 border-b border-white/5 bg-night-900/80 pt-[env(safe-area-inset-top)] backdrop-blur-lg">
         <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2">
           <Logo compact />
-          <span className="rounded-full bg-gold/15 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-gold-soft">Admin</span>
-          <nav aria-label="Admin" className="ml-auto flex gap-1">
+          <span className="rounded-full bg-accent/15 px-2 max-[399px]:hidden py-0.5 text-xs font-bold uppercase tracking-wider text-accent-soft">
+            Admin
+          </span>
+          <nav aria-label="Admin" className="ml-auto flex sm:gap-1">
             {tabs.map(({ to, label, icon: Icon, end }) => (
               <NavLink
                 key={to}
@@ -42,7 +45,7 @@ export function AdminLayout() {
           <NavLink
             to="/profile"
             aria-label="Your profile"
-            className="grid size-11 shrink-0 place-items-center rounded-full ring-1 ring-white/10 hover:ring-flame/60"
+            className="grid size-11 shrink-0 place-items-center rounded-full ring-1 ring-white/10 hover:ring-accent/60"
           >
             <Avatar src={profile?.avatar_url} name={profile?.full_name} className="size-9 text-sm" />
           </NavLink>

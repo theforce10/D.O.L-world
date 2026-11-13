@@ -1,7 +1,8 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 
-const COLORS = ['#ff3d2e', '#ffc72c', '#ff7a1a', '#ff8a6e', '#ffe38a', '#fff5e8']
+// Follows the current event's accent, so karaoke confetti is yellow and Mix & Mingle confetti is red.
+const COLORS = ['var(--color-accent)', 'var(--color-accent-soft)', 'var(--color-accent-deep)', 'var(--color-accent)', 'var(--color-ink)']
 
 interface Piece {
   id: number

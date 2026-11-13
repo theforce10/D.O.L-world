@@ -65,7 +65,7 @@ function TicketDialog({ ticket, name, celebrate, onClose }: TicketDialogProps) {
           animate={{ scale: 1, rotate: 0, opacity: 1, y: 0 }}
           exit={{ scale: 0.8, opacity: 0, y: 20 }}
           transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-          className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(150deg,var(--color-flame),var(--color-ember)_55%,var(--color-gold))] p-[2px] shadow-glow-flame"
+          className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(150deg,var(--color-accent-deep),var(--color-accent)_55%,var(--color-accent-soft))] p-[2px] shadow-glow-accent"
         >
           <div className="relative rounded-[calc(2rem-2px)] bg-night-900 px-6 pb-7 pt-6 text-center">
             <button
@@ -78,7 +78,7 @@ function TicketDialog({ ticket, name, celebrate, onClose }: TicketDialogProps) {
               <X aria-hidden className="size-5" />
             </button>
 
-            <p className="font-display text-xs font-bold uppercase tracking-[0.3em] text-gold-soft">{BRAND}</p>
+            <p className="font-display text-xs font-bold uppercase tracking-[0.3em] text-accent-soft">{BRAND}</p>
             {name ? (
               <h2 id={titleId} className="mt-2 px-8">
                 <span className="block break-words text-2xl font-bold text-ink">{name}</span>
@@ -91,7 +91,7 @@ function TicketDialog({ ticket, name, celebrate, onClose }: TicketDialogProps) {
             )}
 
             <motion.p
-              className="my-2 font-display text-[6.5rem] font-extrabold leading-none text-gradient drop-shadow-[0_0_30px_rgb(255_61_46/0.45)] sm:text-[8rem]"
+              className="my-2 font-display text-[6.5rem] font-extrabold leading-none text-gradient drop-shadow-[0_0_30px_var(--color-accent-glow)] sm:text-[8rem]"
               initial={{ scale: 0.6 }}
               animate={{ scale: [0.6, 1.15, 1] }}
               transition={{ duration: 0.9, delay: 0.15, times: [0, 0.7, 1] }}

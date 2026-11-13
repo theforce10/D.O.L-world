@@ -15,7 +15,7 @@ import { AuthLayout } from './AuthLayout'
 import { forgotPasswordSchema, type ForgotPasswordValues } from './schemas'
 
 const backToLogin = (
-  <Link to="/login" className="font-semibold text-gold-soft underline-offset-4 hover:underline">
+  <Link to="/login" className="font-semibold text-accent-soft underline-offset-4 hover:underline">
     Back to log in
   </Link>
 )
@@ -49,9 +49,9 @@ export function ForgotPasswordPage() {
             initial={{ x: -40, opacity: 0, rotate: -15 }}
             animate={{ x: 0, opacity: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-            className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-gold"
+            className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-accent"
           >
-            <Send aria-hidden className="size-9 text-gold" />
+            <Send aria-hidden className="size-9 text-accent" />
           </motion.div>
         </motion.div>
         <motion.p variants={rise} className="text-sm text-ink-muted">

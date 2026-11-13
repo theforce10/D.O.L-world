@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Input } from '@/components/ui/Input'
+import { Select } from '@/components/ui/Select'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { EmptyState, ErrorState } from '@/components/ui/States'
 import { BRAND } from '@/lib/brand'
@@ -29,10 +30,21 @@ const csvColumns: CsvColumn<Contact>[] = [
   { header: 'Marketing consent', value: (c) => (c.marketing_consent ? 'yes' : 'no') },
   { header: 'Consent given at', value: (c) => c.consent_at },
   { header: 'Events attended', value: (c) => c.events_attended },
+  { header: 'Karaoke events', value: (c) => c.karaoke_events },
+  { header: 'Mix & Mingle events', value: (c) => c.mingle_events },
   { header: 'Songs', value: (c) => c.total_songs },
   { header: 'Last song at', value: (c) => c.last_song_at },
+  { header: 'Last check-in at', value: (c) => c.last_check_in_at },
   { header: 'Joined', value: (c) => c.joined_at },
 ]
+
+type TypeFilter = 'all' | 'karaoke' | 'mix_mingle'
+
+function attended(c: Contact, type: TypeFilter): boolean {
+  if (type === 'karaoke') return c.karaoke_events > 0
+  if (type === 'mix_mingle') return c.mingle_events > 0
+  return true
+}
 
 function matches(c: Contact, q: string): boolean {
   if (!q) return true
@@ -52,7 +64,7 @@ function ConsentBadge({ consent }: { consent: boolean }) {
   )
 }
 
-const contactLink = 'inline-flex min-h-8 items-center gap-1.5 text-ink-muted hover:text-gold-soft'
+const contactLink = 'inline-flex min-h-8 items-center gap-1.5 text-ink-muted hover:text-accent-soft'
 
 function ContactLinks({ c, className }: { c: Contact; className?: string }) {
   return (
@@ -75,14 +87,21 @@ export function ContactsPage() {
   const contacts = useContacts()
   const [search, setSearch] = useState('')
   const [consentOnly, setConsentOnly] = useState(true)
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all')
   const query = useDeferredValue(search.trim().toLowerCase())
 
   const all = useMemo(() => contacts.data ?? [], [contacts.data])
   const consented = useMemo(() => all.filter((c) => c.marketing_consent).length, [all])
-  const visible = useMemo(() => all.filter((c) => (!consentOnly || c.marketing_consent) && matches(c, query)), [all, consentOnly, query])
+  const visible = useMemo(
+    () => all.filter((c) => (!consentOnly || c.marketing_consent) && attended(c, typeFilter) && matches(c, query)),
+    [all, consentOnly, typeFilter, query],
+  )
 
   const exportCsv = () => {
-    downloadCsv(`${slugify(BRAND)}-contacts${consentOnly ? '-opted-in' : ''}.csv`, toCsv(visible, csvColumns))
+    downloadCsv(
+      `${slugify(BRAND)}-contacts${typeFilter === 'all' ? '' : `-${typeFilter.replace('_', '-')}`}${consentOnly ? '-opted-in' : ''}.csv`,
+      toCsv(visible, csvColumns),
+    )
     toast.success(`Exported ${visible.length} ${visible.length === 1 ? 'contact' : 'contacts'}`)
   }
 
@@ -114,6 +133,16 @@ export function ContactsPage() {
             className="min-h-11 py-2 sm:text-sm"
           />
         </div>
+        <Select
+          aria-label="Event type"
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value as TypeFilter)}
+          className="sm:w-48"
+        >
+          <option value="all">All event types</option>
+          <option value="karaoke">Came to karaoke</option>
+          <option value="mix_mingle">Came to Mix &amp; Mingle</option>
+        </Select>
         <Checkbox
           id="consent-only"
           label="Opted in only"
@@ -125,7 +154,7 @@ export function ContactsPage() {
           <Download aria-hidden className="size-4" /> Export CSV
         </Button>
       </div>
-      <p className="text-sm text-ink-subtle">Only message people marked “Opted in”. Everyone else gave their details just for the queue.</p>
+      <p className="text-sm text-ink-subtle">Only message people marked “Opted in”. Everyone else gave their details just to take part.</p>
 
       {contacts.isPending ? (
         <div className="space-y-3" aria-busy>
@@ -157,8 +186,8 @@ export function ContactsPage() {
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-bold">{c.full_name ?? 'No name'}</p>
                       <p className="text-xs text-ink-subtle">
-                        {c.total_songs} {c.total_songs === 1 ? 'song' : 'songs'} · {c.events_attended}{' '}
-                        {c.events_attended === 1 ? 'event' : 'events'}
+                        {c.karaoke_events} karaoke · {c.mingle_events} Mix &amp; Mingle · {c.total_songs}{' '}
+                        {c.total_songs === 1 ? 'song' : 'songs'}
                       </p>
                     </div>
                     <ConsentBadge consent={c.marketing_consent} />
@@ -180,10 +209,16 @@ export function ContactsPage() {
                     Contact
                   </th>
                   <th scope="col" className="px-4 py-3 text-right font-medium">
-                    Events
+                    Karaoke
+                  </th>
+                  <th scope="col" className="px-4 py-3 text-right font-medium">
+                    Mix &amp; Mingle
                   </th>
                   <th scope="col" className="px-4 py-3 text-right font-medium">
                     Songs
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-medium">
+                    Last check-in
                   </th>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Joined
@@ -205,8 +240,12 @@ export function ContactsPage() {
                     <td className="max-w-80 px-4 py-3">
                       <ContactLinks c={c} className="flex-col" />
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums">{c.events_attended}</td>
+                    <td className="px-4 py-3 text-right tabular-nums">{c.karaoke_events}</td>
+                    <td className="px-4 py-3 text-right tabular-nums">{c.mingle_events}</td>
                     <td className="px-4 py-3 text-right tabular-nums">{c.total_songs}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-ink-muted">
+                      {c.last_check_in_at ? dateFormat.format(new Date(c.last_check_in_at)) : '—'}
+                    </td>
                     <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{dateFormat.format(new Date(c.joined_at))}</td>
                     <td className="px-4 py-3">
                       <ConsentBadge consent={c.marketing_consent} />

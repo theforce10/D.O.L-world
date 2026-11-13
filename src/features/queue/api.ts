@@ -20,7 +20,7 @@ export function useActiveEvent() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('events')
-        .select('id, name, venue, event_date, current_number')
+        .select('id, name, venue, event_date, current_number, type, ended_at')
         .eq('is_active', true)
         .maybeSingle()
       if (error) throw error

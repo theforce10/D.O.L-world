@@ -1,31 +1,38 @@
 @import 'tailwindcss';
 
-@theme {
+@theme static {
   --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --color-night-950: #120505;
-  --color-night-900: #1a0907;
-  --color-night-800: #250e0b;
-  --color-night-700: #3a1611;
-  --color-night-600: #52201a;
-  --color-night-500: #6e2e22;
+  /* Neutral near-black surfaces so the accent alone says which event you're at. */
+  --color-night-950: #09080b;
+  --color-night-900: #0e0d11;
+  --color-night-800: #17161b;
+  --color-night-700: #222027;
+  --color-night-600: #2f2d35;
+  --color-night-500: #45424d;
 
-  --color-ink: #fff5e8;
-  --color-ink-muted: #dcc3ad;
-  --color-ink-subtle: #b0927c;
+  --color-ink: #f6f1ea;
+  --color-ink-muted: #cfc8bf;
+  --color-ink-subtle: #a39c94;
 
-  --color-flame: #ff3d2e;
-  --color-flame-soft: #ff8a6e;
-  --color-gold: #ffc72c;
-  --color-gold-soft: #ffe38a;
-  --color-ember: #ff7a1a;
+  /*
+   * One accent, switched by data-mode on <html> (or any element):
+   *   karaoke = yellow, mingle = red, neutral (no live event) = ivory.
+   * Never mix them on one screen. Use accent / accent-soft / accent-deep only.
+   */
+  --color-accent: #f4efe8;
+  --color-accent-soft: #ffffff;
+  --color-accent-deep: #d9d1c6;
+  --color-accent-glow: rgb(244 239 232 / 0.3);
+
+  /* Brand bloom for the velvet surface (home + auth pages). Only used by SpotlightBg. */
+  --color-velvet-bloom: transparent;
+
   --color-lime: #b6ff5c;
-  --color-amber: #ffc53d;
   --color-danger: #ff6b6b;
 
-  --shadow-glow-flame: 0 0 0 1px rgb(255 61 46 / 0.5), 0 0 28px -4px rgb(255 61 46 / 0.6);
-  --shadow-glow-gold: 0 0 0 1px rgb(255 199 44 / 0.45), 0 0 28px -4px rgb(255 199 44 / 0.55);
+  --shadow-glow-accent: 0 0 0 1px rgb(244 239 232 / 0.35), 0 0 28px -4px rgb(244 239 232 / 0.3);
   --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -20px rgb(0 0 0 / 0.6);
 
   --animate-gradient-pan: gradient-pan 12s ease-in-out infinite alternate;
@@ -50,6 +57,37 @@
 }
 
 @layer base {
+  [data-mode='karaoke'] {
+    --color-accent: #ffc72c;
+    --color-accent-soft: #ffe38a;
+    --color-accent-deep: #f5a300;
+    --color-accent-glow: rgb(255 199 44 / 0.5);
+    --shadow-glow-accent: 0 0 0 1px rgb(255 199 44 / 0.45), 0 0 28px -4px rgb(255 199 44 / 0.55);
+  }
+
+  [data-mode='mingle'] {
+    --color-accent: #ff3d2e;
+    --color-accent-soft: #ff8a6e;
+    --color-accent-deep: #e0261a;
+    --color-accent-glow: rgb(255 61 46 / 0.55);
+    --shadow-glow-accent: 0 0 0 1px rgb(255 61 46 / 0.5), 0 0 28px -4px rgb(255 61 46 / 0.6);
+  }
+
+  /*
+   * Velvet surface: deep plum instead of grey-black on the attendee front door
+   * (home, login, signup, password reset, onboarding). Set by AccentModeProvider.
+   * It's a surface, not an accent: yellow and red both sit on it, never together.
+   */
+  [data-surface='velvet'] {
+    --color-night-950: #100818;
+    --color-night-900: #180c24;
+    --color-night-800: #241335;
+    --color-night-700: #321b48;
+    --color-night-600: #43275e;
+    --color-night-500: #5c3c7c;
+    --color-velvet-bloom: rgb(140 60 220 / 0.28);
+  }
+
   html {
     color-scheme: dark;
     -webkit-tap-highlight-color: transparent;
@@ -68,16 +106,16 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-gold;
+    @apply outline-2 outline-offset-2 outline-accent;
   }
 
   ::selection {
-    @apply bg-flame/40 text-ink;
+    @apply bg-accent/40 text-ink;
   }
 }
 
 @utility text-gradient {
-  background-image: linear-gradient(100deg, var(--color-flame) 10%, var(--color-ember) 50%, var(--color-gold) 90%);
+  background-image: linear-gradient(100deg, var(--color-accent-deep) 5%, var(--color-accent) 45%, var(--color-accent-soft) 95%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;

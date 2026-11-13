@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Phone, User } from 'lucide-react'
+import { AtSign, Phone, User } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
@@ -17,21 +17,23 @@ interface ProfileFormProps {
   profile: Profile
   mode: 'onboarding' | 'edit'
   submitting: boolean
-  onSubmit: (values: ProfileFormValues & { phone: string }) => void
+  askConsent?: boolean
+  onSubmit: (values: Omit<ProfileFormValues, 'snapchat'> & { phone: string; snapchat?: string | null }) => void
 }
 
-export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileFormProps) {
+export function ProfileForm({ profile, mode, submitting, askConsent = true, onSubmit }: ProfileFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<ProfileFormInput, unknown, ProfileFormValues>({
-    resolver: zodResolver(mode === 'onboarding' ? onboardingSchema : profileSchema),
+    resolver: zodResolver(mode === 'onboarding' && askConsent ? onboardingSchema : profileSchema),
     mode: 'onTouched',
     defaultValues: {
       full_name: profile.full_name ?? '',
       phone: profile.phone ? formatPhone(profile.phone) : '',
       marketing_consent: mode === 'onboarding' ? false : profile.marketing_consent,
+      snapchat: profile.snapchat ?? '',
     },
   })
 
@@ -39,7 +41,9 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
     <motion.form
       variants={stagger}
       noValidate
-      onSubmit={handleSubmit((values) => onSubmit({ ...values, phone: toE164(values.phone)! }))}
+      onSubmit={handleSubmit(({ snapchat, ...values }) =>
+        onSubmit({ ...values, phone: toE164(values.phone)!, ...(mode === 'edit' ? { snapchat: snapchat || null } : {}) }),
+      )}
       className="space-y-5"
     >
       <motion.div variants={rise}>
@@ -77,32 +81,58 @@ export function ProfileForm({ profile, mode, submitting, onSubmit }: ProfileForm
         </Field>
       </motion.div>
 
-      <motion.div variants={rise} className="space-y-1.5">
-        <Checkbox
-          id="marketing_consent"
-          aria-invalid={!!errors.marketing_consent}
-          aria-describedby={describedBy('marketing_consent', { error: errors.marketing_consent })}
-          label={
-            <>
-              I agree that {BRAND} may contact me about future events and promotions.
-              {mode === 'edit' && <span className="mt-1 block text-ink-muted">Untick any time to stop hearing from us.</span>}
-            </>
-          }
-          {...register('marketing_consent')}
-        />
-        {errors.marketing_consent && (
-          <p id="marketing_consent-error" role="alert" className="text-sm text-danger">
-            {errors.marketing_consent.message}
-          </p>
-        )}
-      </motion.div>
+      {mode === 'edit' && (
+        <motion.div variants={rise}>
+          <Field
+            id="snapchat"
+            label="Snapchat"
+            optional
+            error={errors.snapchat?.message}
+            hint="Only shown to people you match with in Mix & Mingle Connect."
+          >
+            <Input
+              id="snapchat"
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              icon={<AtSign className="size-5" />}
+              placeholder="yourname"
+              aria-invalid={!!errors.snapchat}
+              aria-describedby={describedBy('snapchat', { error: errors.snapchat, hint: true })}
+              {...register('snapchat')}
+            />
+          </Field>
+        </motion.div>
+      )}
+
+      {askConsent && (
+        <motion.div variants={rise} className="space-y-1.5">
+          <Checkbox
+            id="marketing_consent"
+            aria-invalid={!!errors.marketing_consent}
+            aria-describedby={describedBy('marketing_consent', { error: errors.marketing_consent })}
+            label={
+              <>
+                I agree that {BRAND} may contact me about future events and promotions.
+                {mode === 'edit' && <span className="mt-1 block text-ink-muted">Untick any time to stop hearing from us.</span>}
+              </>
+            }
+            {...register('marketing_consent')}
+          />
+          {errors.marketing_consent && (
+            <p id="marketing_consent-error" role="alert" className="text-sm text-danger">
+              {errors.marketing_consent.message}
+            </p>
+          )}
+        </motion.div>
+      )}
 
       <motion.div
         variants={rise}
         className="sticky bottom-0 -mx-5 bg-gradient-to-t from-night-800 via-night-800/95 to-transparent px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:static sm:mx-0 sm:bg-none sm:p-0"
       >
         <Button type="submit" size="lg" fullWidth loading={submitting} disabled={mode === 'edit' && !isDirty}>
-          {mode === 'onboarding' ? "Let's go 🎤" : 'Save changes'}
+          {mode === 'onboarding' ? "Let's go" : 'Save changes'}
         </Button>
       </motion.div>
     </motion.form>

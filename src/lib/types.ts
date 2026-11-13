@@ -18,7 +18,17 @@ export type QueueStatus = Omit<RawQueueStatus, 'up_next_number' | 'my_request_id
 
 type RawContact = PublicSchema['Functions']['admin_contacts']['Returns'][number]
 export type Contact = {
-  [K in keyof RawContact]: K extends 'user_id' | 'marketing_consent' | 'events_attended' | 'total_songs' | 'joined_at'
+  [K in keyof RawContact]: K extends
+    | 'user_id'
+    | 'marketing_consent'
+    | 'events_attended'
+    | 'karaoke_events'
+    | 'mingle_events'
+    | 'total_songs'
+    | 'joined_at'
     ? RawContact[K]
     : RawContact[K] | null
 }
+
+export type EventType = PublicSchema['Enums']['event_type']
+export type CheckIn = PublicSchema['Tables']['check_ins']['Row']

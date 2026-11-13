@@ -3,11 +3,11 @@ import { ContactLine, LegalLayout } from './LegalLayout'
 
 export function PrivacyPage() {
   return (
-    <LegalLayout title="Privacy policy" updated="31 October 2026">
+    <LegalLayout title="Privacy policy" updated="13 November 2026">
       <section>
         <p>
-          {BRAND} runs karaoke nights. This page explains what we collect when you use this app to join the singing queue, why, and what you
-          can do about it.
+          {BRAND} runs karaoke nights and Mix &amp; Mingle evenings. This page explains what we collect when you use this app, why, and what
+          you can do about it.
         </p>
       </section>
 
@@ -22,6 +22,19 @@ export function PrivacyPage() {
           </li>
           <li>
             <strong>Songs:</strong> the songs you submit, any note for the host, your queue number and when you sang.
+          </li>
+          <li>
+            <strong>Check-ins (Mix &amp; Mingle):</strong> which events you joined and when, that you confirmed you're 18 or older, and
+            whether you chose to be findable in Connect.
+          </li>
+          <li>
+            <strong>Questions to the host (Mix &amp; Mingle):</strong> the text of each question and when you sent it. It is linked to your
+            account only so we can enforce limits and stop abuse. The host and the room never see who asked.
+          </li>
+          <li>
+            <strong>Connect (Mix &amp; Mingle, optional):</strong> your Snapchat username if you add it, who you said you'd like to connect
+            with, anyone you block, and any reports you send. Your Snapchat is only shown to people you match with (you both asked). Nobody
+            is told you asked unless they asked you too. Reports are seen only by the {BRAND} team.
           </li>
           <li>
             <strong>Your marketing choice:</strong> whether you agreed to hear from us, and when.

@@ -44,10 +44,14 @@ export function useAdminRealtime(eventId: string | undefined) {
         refreshQueue,
       )
       .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, refreshEvents)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'check_ins', filter: `event_id=eq.${eventId}` }, () =>
+        queryClient.invalidateQueries({ queryKey: adminKeys.stats(eventId) }),
+      )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           refreshQueue()
           refreshEvents()
+          void queryClient.invalidateQueries({ queryKey: adminKeys.stats(eventId) })
         }
       })
 

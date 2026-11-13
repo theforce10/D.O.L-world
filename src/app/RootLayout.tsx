@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 import { useLocation, useOutlet } from 'react-router'
 import { SpotlightBg } from '@/components/ui/SpotlightBg'
+import { AccentModeProvider } from './accent'
 
 function FrozenOutlet() {
   const outlet = useOutlet()
@@ -13,7 +14,7 @@ export function RootLayout() {
   const location = useLocation()
 
   return (
-    <>
+    <AccentModeProvider>
       <SpotlightBg />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -27,6 +28,6 @@ export function RootLayout() {
           <FrozenOutlet />
         </motion.div>
       </AnimatePresence>
-    </>
+    </AccentModeProvider>
   )
 }

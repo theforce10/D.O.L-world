@@ -25,7 +25,7 @@ export function EmptyState({
       <motion.div
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        className="grid size-16 place-items-center rounded-3xl bg-night-700/70 text-flame-soft"
+        className="grid size-16 place-items-center rounded-3xl bg-night-700/70 text-accent-soft"
       >
         {icon}
       </motion.div>
@@ -54,7 +54,7 @@ export function ErrorState({ message, onRetry, className }: { message: string; o
 export function FullPageSpinner({ label = 'Loading' }: { label?: string }) {
   return (
     <div className="grid min-h-dvh place-items-center">
-      <Spinner className="size-8 text-flame" label={label} />
+      <Spinner className="size-8 text-accent" label={label} />
     </div>
   )
 }
