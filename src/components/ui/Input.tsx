@@ -2,7 +2,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode, type TextareaHTML
 import { cn } from '@/lib/utils'
 
 const base =
-  'w-full rounded-2xl border bg-night-800/70 px-4 text-base text-ink placeholder:text-ink-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 disabled:opacity-60 aria-invalid:border-danger/70 aria-invalid:focus-visible:ring-danger/60'
+  'w-full rounded-2xl border bg-night-800/70 px-4 text-base text-ink placeholder:text-ink-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 disabled:opacity-60 aria-invalid:border-danger/70 aria-invalid:focus-visible:ring-danger/60'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactNode

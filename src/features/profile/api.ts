@@ -26,7 +26,7 @@ export function useProfile() {
   })
 }
 
-export type ProfileUpdate = Partial<Pick<Profile, 'full_name' | 'phone' | 'avatar_url' | 'marketing_consent'>>
+export type ProfileUpdate = Partial<Pick<Profile, 'full_name' | 'phone' | 'avatar_url' | 'marketing_consent' | 'snapchat'>>
 
 export function useUpdateProfile() {
   const { user } = useAuth()

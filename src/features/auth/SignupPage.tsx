@@ -39,9 +39,9 @@ function CheckYourEmail({ email }: { email: string }) {
           initial={{ scale: 0.5, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 260, damping: 14 }}
-          className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-gold"
+          className="grid size-20 place-items-center rounded-3xl bg-night-700 shadow-glow-accent"
         >
-          <MailCheck aria-hidden className="size-10 text-gold" />
+          <MailCheck aria-hidden className="size-10 text-accent" />
         </motion.div>
       </motion.div>
       <motion.p variants={rise} className="text-sm text-ink-muted">
@@ -89,7 +89,7 @@ export function SignupPage() {
           Already have an account?{' '}
           <Link
             to={`/login${params.get('next') ? `?next=${encodeURIComponent(next)}` : ''}`}
-            className="font-semibold text-gold-soft underline-offset-4 hover:underline"
+            className="font-semibold text-accent-soft underline-offset-4 hover:underline"
           >
             Log in
           </Link>

@@ -23,15 +23,22 @@ function GoogleMark() {
   )
 }
 
-export function GoogleButton({ next }: { next: string }) {
+export function GoogleButton({ next, variant = 'secondary' }: { next: string; variant?: 'primary' | 'secondary' }) {
   const google = useMutation({
     mutationFn: () => signInWithGoogle(next),
     onError: (error) => toast.error(authErrorMessage(error)),
   })
 
   return (
-    <Button variant="secondary" size="lg" fullWidth loading={google.isPending || google.isSuccess} onClick={() => google.mutate()}>
-      {!(google.isPending || google.isSuccess) && <GoogleMark />}
+    <Button variant={variant} size="lg" fullWidth loading={google.isPending || google.isSuccess} onClick={() => google.mutate()}>
+      {!(google.isPending || google.isSuccess) &&
+        (variant === 'primary' ? (
+          <span className="grid size-7 place-items-center rounded-full bg-white">
+            <GoogleMark />
+          </span>
+        ) : (
+          <GoogleMark />
+        ))}
       Continue with Google
     </Button>
   )

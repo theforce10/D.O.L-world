@@ -53,6 +53,10 @@ export const router = createBrowserRouter([
             element: <RequireProfile />,
             children: [
               {
+                path: '/connect/:eventId',
+                lazy: () => import('@/features/connect/ConnectPage').then((m) => ({ Component: m.ConnectPage })),
+              },
+              {
                 path: '/profile',
                 lazy: () =>
                   import('@/features/profile/ProfilePage').then((m) => ({
@@ -77,6 +81,17 @@ export const router = createBrowserRouter([
                           })),
                       },
                       {
+                        path: 'events/:eventId/host',
+                        lazy: () =>
+                          import('@/features/host/HostConsolePage').then((m) => ({
+                            Component: m.HostConsolePage,
+                          })),
+                      },
+                      {
+                        path: 'reports',
+                        lazy: () => import('@/features/admin/ReportsPage').then((m) => ({ Component: m.ReportsPage })),
+                      },
+                      {
                         path: 'contacts',
                         lazy: () =>
                           import('@/features/admin/ContactsPage').then((m) => ({
@@ -84,6 +99,10 @@ export const router = createBrowserRouter([
                           })),
                       },
                     ],
+                  },
+                  {
+                    path: '/screen/:eventId',
+                    lazy: () => import('@/features/screen/ScreenPage').then((m) => ({ Component: m.ScreenPage })),
                   },
                 ],
               },

@@ -1,14 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { CalendarDays, MapPin } from 'lucide-react'
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { AppHeader } from '@/app/AppHeader'
 import { Card } from '@/components/ui/Card'
+import { EventHeading } from '@/components/ui/EventHeading'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { ErrorState } from '@/components/ui/States'
 import type { RequestStatus } from '@/lib/types'
 import { cn, errorMessage } from '@/lib/utils'
+import { ConnectBanner } from '@/features/connect/ConnectBanner'
 import { useProfile } from '@/features/profile/api'
 import { queueKeys, useActiveEvent, useMyActiveRequest, useQueueStatus, useSubmitSong } from './api'
 import { LiveStatus, UpNextAlert } from './LiveStatus'
@@ -17,8 +18,6 @@ import { SongForm } from './SongForm'
 import { statusMeta } from './status'
 import { TicketReveal, type Ticket } from './TicketReveal'
 import { useQueueRealtime } from './useQueueRealtime'
-
-const dateFormat = new Intl.DateTimeFormat(undefined, { weekday: 'short', day: 'numeric', month: 'short' })
 
 const section = {
   initial: { opacity: 0, y: 16 },
@@ -68,30 +67,10 @@ export function HomePage() {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-xl space-y-5 px-4 pb-16 pt-5">
+        <ConnectBanner />
         <motion.div {...section} className="space-y-1">
           <p className="text-ink-muted">Hey {firstName ?? 'there'} 👋</p>
-          {event.data && (
-            <>
-              <h1 className="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xl font-extrabold sm:text-3xl">
-                {event.data.name}
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-flame/15 px-2.5 py-0.5 font-sans text-xs font-bold uppercase tracking-wider text-flame-soft">
-                  <span className="size-1.5 rounded-full bg-flame motion-safe:animate-pulse" /> Live
-                </span>
-              </h1>
-              <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
-                {event.data.venue && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin aria-hidden className="size-4" /> {event.data.venue}
-                  </span>
-                )}
-                {event.data.event_date && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays aria-hidden className="size-4" /> {dateFormat.format(new Date(`${event.data.event_date}T00:00:00`))}
-                  </span>
-                )}
-              </p>
-            </>
-          )}
+          {event.data && <EventHeading name={event.data.name} venue={event.data.venue} eventDate={event.data.event_date} />}
         </motion.div>
 
         <LayoutGroup>
@@ -144,7 +123,7 @@ export function HomePage() {
                   ) : mine.data ? (
                     <motion.div key="my-song" layout {...section}>
                       <Card className="flex items-center gap-4">
-                        <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-2xl font-extrabold text-gold">
+                        <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-night-700 font-display text-2xl font-extrabold text-accent">
                           #{mine.data.queue_number}
                         </div>
                         <div className="min-w-0 flex-1">

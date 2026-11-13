@@ -14,6 +14,7 @@ import { ProfileForm } from './ProfileForm'
 export function OnboardingPage() {
   const [params] = useSearchParams()
   const next = safeNext(params.get('next'))
+  const askConsent = params.get('consent') !== 'later'
   const profile = useProfile()
   const update = useUpdateProfile()
 
@@ -32,7 +33,7 @@ export function OnboardingPage() {
   return (
     <AuthLayout
       title={firstName ? `Nice to meet you, ${firstName}!` : 'Nice to meet you!'}
-      subtitle={`A few details so ${BRAND} knows who's on the mic.`}
+      subtitle={`A few details so ${BRAND} knows who's here.`}
     >
       <motion.div variants={rise}>
         <AvatarUpload src={profile.data.avatar_url} name={profile.data.full_name} />
@@ -40,6 +41,7 @@ export function OnboardingPage() {
       <ProfileForm
         profile={profile.data}
         mode="onboarding"
+        askConsent={askConsent}
         submitting={update.isPending}
         onSubmit={(values) =>
           update.mutate(values, {

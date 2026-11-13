@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useDragControls } from 'motion/react'
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -18,6 +18,7 @@ export function Dialog({ open, onClose, ...rest }: DialogProps) {
 function DialogPanel({ onClose, title, description, children }: Omit<DialogProps, 'open'>) {
   const titleId = useId()
   const panelRef = useRef<HTMLDivElement>(null)
+  const drag = useDragControls()
 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null
@@ -49,12 +50,27 @@ function DialogPanel({ onClose, title, description, children }: Omit<DialogProps
         aria-labelledby={titleId}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
+        drag="y"
+        dragControls={drag}
+        dragListener={false}
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={{ top: 0, bottom: 0.7 }}
+        onDragEnd={(_, info) => {
+          if (info.offset.y > 120 || info.velocity.y > 600) onClose()
+        }}
         initial={{ y: 40, opacity: 0, scale: 0.98 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         exit={{ y: 30, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 380, damping: 32 }}
         className="relative max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl border border-white/10 bg-night-900 p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-card focus:outline-none sm:max-w-md sm:rounded-3xl sm:p-7"
       >
+        <div
+          aria-hidden
+          onPointerDown={(e) => drag.start(e)}
+          className="-mx-5 -mt-5 mb-1 flex h-7 cursor-grab touch-none items-center justify-center active:cursor-grabbing sm:hidden"
+        >
+          <span className="h-1.5 w-10 rounded-full bg-white/20" />
+        </div>
         <button
           type="button"
           data-close

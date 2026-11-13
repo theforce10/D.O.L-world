@@ -4,11 +4,11 @@ import { ContactLine, LegalLayout } from './LegalLayout'
 
 export function TermsPage() {
   return (
-    <LegalLayout title="Terms of use" updated="31 October 2026">
+    <LegalLayout title="Terms of use" updated="11 November 2026">
       <section>
         <p>
-          By creating an account you agree to these terms. They are short because the app does one thing: put you in the karaoke queue at{' '}
-          {BRAND} events.
+          By creating an account you agree to these terms. They are short because the app does two things at {BRAND} events: put you in the
+          karaoke queue, and let you take part in Mix &amp; Mingle evenings.
         </p>
       </section>
 
@@ -16,7 +16,7 @@ export function TermsPage() {
         <h2>Your account</h2>
         <ul>
           <li>Use your real name and a phone number where the host can reach you during the event.</li>
-          <li>Keep your password to yourself. You're responsible for songs submitted from your account.</li>
+          <li>Keep your password to yourself. You're responsible for anything submitted from your account.</li>
         </ul>
       </section>
 
@@ -44,7 +44,7 @@ export function TermsPage() {
         <h2>Privacy</h2>
         <p>
           How we handle your details is explained in our{' '}
-          <Link to="/privacy" className="font-semibold text-gold-soft underline-offset-4 hover:underline">
+          <Link to="/privacy" className="font-semibold text-accent-soft underline-offset-4 hover:underline">
             privacy policy
           </Link>
           .

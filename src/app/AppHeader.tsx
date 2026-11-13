@@ -18,7 +18,7 @@ export function AppHeader() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-gold-soft hover:bg-white/5"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-semibold text-accent-soft hover:bg-white/5"
             >
               <LayoutDashboard aria-hidden className="size-4" /> <span className="max-[399px]:sr-only">Admin</span>
             </Link>
@@ -27,7 +27,7 @@ export function AppHeader() {
             <Link
               to="/profile"
               aria-label="Your profile"
-              className="grid size-11 place-items-center rounded-full ring-1 ring-white/10 hover:ring-flame/60"
+              className="grid size-11 place-items-center rounded-full ring-1 ring-white/10 hover:ring-accent/60"
             >
               <Avatar src={profile?.avatar_url} name={profile?.full_name} className="size-9 text-sm" />
             </Link>

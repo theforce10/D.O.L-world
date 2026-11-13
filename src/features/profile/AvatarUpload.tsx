@@ -14,7 +14,7 @@ export function AvatarUpload({ src, name }: { src: string | null; name: string |
   return (
     <div className="flex items-center gap-4">
       <div className="relative">
-        <Avatar src={src} name={name} className="size-20 text-2xl ring-2 ring-flame/50 ring-offset-2 ring-offset-night-800" />
+        <Avatar src={src} name={name} className="size-20 text-2xl ring-2 ring-accent/50 ring-offset-2 ring-offset-night-800" />
         {upload.isPending && (
           <span className="absolute inset-0 grid place-items-center rounded-full bg-night-950/70">
             <Spinner className="text-ink" label="Uploading photo" />
@@ -27,7 +27,7 @@ export function AvatarUpload({ src, name }: { src: string | null; name: string |
           whileTap={{ scale: 0.95 }}
           disabled={upload.isPending}
           onClick={() => inputRef.current?.click()}
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 px-4 text-sm font-semibold text-ink hover:border-gold/60 disabled:opacity-50"
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 px-4 text-sm font-semibold text-ink hover:border-accent/60 disabled:opacity-50"
         >
           <Camera aria-hidden className="size-4" />
           {src ? 'Change photo' : 'Add a photo'}
