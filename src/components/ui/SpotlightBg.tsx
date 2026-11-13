@@ -6,8 +6,8 @@ export function SpotlightBg() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-night-900 transition-colors duration-700">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--color-night-700),transparent_60%)]" />
-      {/* Violet bloom, only visible on the velvet surface (transparent elsewhere). */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_15%_100%,var(--color-velvet-bloom),transparent_70%),radial-gradient(ellipse_60%_45%_at_100%_0%,var(--color-velvet-bloom),transparent_70%)]" />
+      {/* Bloom tinted to the current surface (data-surface on <html>). */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_15%_100%,var(--color-surface-bloom),transparent_70%),radial-gradient(ellipse_60%_45%_at_100%_0%,var(--color-surface-bloom),transparent_70%)]" />
       <motion.div
         className="absolute -left-1/4 -top-1/4 size-[70vmax] rounded-full bg-accent/20 blur-[100px] transition-colors duration-700"
         animate={reduce ? undefined : { x: ['0%', '18%', '0%'], y: ['0%', '12%', '0%'] }}

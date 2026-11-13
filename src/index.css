@@ -26,8 +26,8 @@
   --color-accent-deep: #d9d1c6;
   --color-accent-glow: rgb(244 239 232 / 0.3);
 
-  /* Brand bloom for the velvet surface (home + auth pages). Only used by SpotlightBg. */
-  --color-velvet-bloom: transparent;
+  /* Bloom tinted to the current surface (see data-surface below). Only used by SpotlightBg. */
+  --color-surface-bloom: transparent;
 
   --color-lime: #b6ff5c;
   --color-danger: #ff6b6b;
@@ -74,10 +74,12 @@
   }
 
   /*
-   * Velvet surface: deep plum instead of grey-black on the attendee front door
-   * (home, login, signup, password reset, onboarding). Set by AccentModeProvider.
-   * It's a surface, not an accent: yellow and red both sit on it, never together.
+   * Surfaces: every area of the app gets its own deep tint instead of grey-black.
+   * Set on <html> by AccentModeProvider from the route (SURFACE_ROUTES in src/app/accent.tsx).
+   * They're surfaces, not accents: yellow and red both sit on every one, never together.
    */
+
+  /* Velvet (plum): attendee front door (home, login, signup, password reset, onboarding). */
   [data-surface='velvet'] {
     --color-night-950: #100818;
     --color-night-900: #180c24;
@@ -85,7 +87,51 @@
     --color-night-700: #321b48;
     --color-night-600: #43275e;
     --color-night-500: #5c3c7c;
-    --color-velvet-bloom: rgb(140 60 220 / 0.28);
+    --color-surface-bloom: rgb(140 60 220 / 0.28);
+  }
+
+  /* Midnight (deep navy): the attendee's own pages (profile, Connect). */
+  [data-surface='midnight'] {
+    --color-night-950: #060b1a;
+    --color-night-900: #0a1226;
+    --color-night-800: #111c38;
+    --color-night-700: #1a284c;
+    --color-night-600: #253663;
+    --color-night-500: #3a4d80;
+    --color-surface-bloom: rgb(60 110 240 / 0.24);
+  }
+
+  /* Lagoon (deep teal): admin dashboard, contacts, reports. */
+  [data-surface='lagoon'] {
+    --color-night-950: #04110f;
+    --color-night-900: #071916;
+    --color-night-800: #0d2622;
+    --color-night-700: #143530;
+    --color-night-600: #1d4741;
+    --color-night-500: #2f635b;
+    --color-surface-bloom: rgb(20 180 160 / 0.2);
+  }
+
+  /* Cosmos (indigo-violet blue): host console and the projector screen. */
+  [data-surface='cosmos'] {
+    --color-night-950: #0b0a1f;
+    --color-night-900: #110f2c;
+    --color-night-800: #1a173f;
+    --color-night-700: #252154;
+    --color-night-600: #332d6c;
+    --color-night-500: #4a438f;
+    --color-surface-bloom: rgb(100 90 255 / 0.26);
+  }
+
+  /* Cocoa (warm espresso): legal pages and 404. */
+  [data-surface='cocoa'] {
+    --color-night-950: #120c08;
+    --color-night-900: #1a120c;
+    --color-night-800: #261b13;
+    --color-night-700: #35261b;
+    --color-night-600: #463325;
+    --color-night-500: #614837;
+    --color-surface-bloom: rgb(210 130 70 / 0.2);
   }
 
   html {
