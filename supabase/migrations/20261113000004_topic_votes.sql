@@ -1,15 +1,8 @@
--- Topic votes: the host puts 2–6 queued topics to a vote, guests pick one,
--- and the host starts the winner (or picks between tied topics). A topic vote
--- is a poll with kind = 'topic' whose options point at topics, so votes,
--- counts, realtime pings and poll_results() all work as for normal polls.
--- Losing topics stay queued for a later vote.
 
 create type public.poll_kind as enum ('poll', 'topic');
 
 alter table public.polls add column kind public.poll_kind not null default 'poll';
 
--- Options copy the topic prompt (guests can't read queued topics), so labels
--- can be as long as a prompt. clean_poll_options() still caps normal polls at 80.
 alter table public.poll_options
   add column topic_id uuid references public.topics (id) on delete cascade,
   drop constraint poll_options_label_check,
@@ -17,11 +10,9 @@ alter table public.poll_options
 
 create index poll_options_topic_idx on public.poll_options (topic_id);
 
--- A normal poll and a topic vote can be open at the same time.
 drop index public.polls_one_open_per_event;
 create unique index polls_one_open_per_event_kind on public.polls (event_id, kind) where status = 'open';
 
--- Keep vote labels in step if the host edits a topic's prompt.
 create function public.sync_topic_vote_labels()
 returns trigger
 language plpgsql
@@ -40,7 +31,6 @@ create trigger topics_sync_vote_labels
   when (old.prompt is distinct from new.prompt)
   execute function public.sync_topic_vote_labels();
 
--- Opens a vote on the given queued topics right away. Returns the poll id.
 create function public.start_topic_vote(p_event_id uuid, p_topic_ids uuid[])
 returns uuid
 language plpgsql
@@ -87,9 +77,6 @@ begin
 end;
 $$;
 
--- Closes the vote and makes p_topic_id live (ending the current topic). The
--- host console offers the leader, or the tied leaders to choose from. The
--- winner moves to the front of the queue so topics stay in the order they ran.
 create function public.finish_topic_vote(p_poll_id uuid, p_topic_id uuid)
 returns void
 language plpgsql
@@ -108,7 +95,6 @@ begin
     raise exception 'Topic vote not found' using errcode = 'P0002';
   end if;
 
-  -- Serialise double-taps / two hosts, then re-check the vote is still open.
   perform 1 from public.events where id = v_event for update;
   if not exists (select 1 from public.polls where id = p_poll_id and status = 'open') then
     raise exception 'This topic vote has already finished';
@@ -142,9 +128,6 @@ begin
 end;
 $$;
 
--- Cancels a running vote: its votes are deleted and the topics stay queued.
--- Closes rather than deletes the poll, because realtime DELETE events can't be
--- filtered by event, so guests wouldn't hear about a deleted poll.
 create function public.cancel_topic_vote(p_poll_id uuid)
 returns void
 language plpgsql
@@ -172,8 +155,6 @@ revoke execute on function public.finish_topic_vote(uuid, uuid) from public, ano
 grant execute on function public.start_topic_vote(uuid, uuid[]) to authenticated;
 grant execute on function public.finish_topic_vote(uuid, uuid) to authenticated;
 
--- "Next topic" would skip the guests' vote, so it waits until the vote is
--- finished or cancelled.
 create or replace function public.advance_topic(p_event_id uuid)
 returns uuid
 language plpgsql
@@ -187,7 +168,6 @@ begin
     raise exception 'Only admins can run topics' using errcode = '42501';
   end if;
 
-  -- Serialise double-taps / two hosts.
   perform 1 from public.events where id = p_event_id for update;
   if not found then
     raise exception 'Event not found' using errcode = 'P0002';
@@ -219,7 +199,6 @@ begin
 end;
 $$;
 
--- Normal polls only: topic votes are started and finished by the RPCs above.
 create or replace function public.open_poll(p_poll_id uuid)
 returns void
 language plpgsql
@@ -278,7 +257,6 @@ begin
 end;
 $$;
 
--- The "polls" stat counts normal polls; topic votes still count towards voters.
 create or replace function public.event_stats(p_event_id uuid)
 returns table (check_ins integer, voters integer, participation integer, questions integer, polls integer, matches integer)
 language plpgsql

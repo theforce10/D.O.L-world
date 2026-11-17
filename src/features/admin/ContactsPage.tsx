@@ -55,7 +55,7 @@ function ConsentBadge({ consent }: { consent: boolean }) {
   return (
     <span
       className={cn(
-        'shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold',
+        'inline-flex shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold',
         consent ? 'bg-lime/15 text-lime' : 'bg-white/10 text-ink-subtle',
       )}
     >
@@ -198,8 +198,8 @@ export function ContactsPage() {
             ))}
           </ul>
 
-          <div className="hidden overflow-hidden rounded-3xl border border-white/10 bg-night-800/70 shadow-card md:block">
-            <table className="w-full text-left text-sm">
+          <div className="hidden overflow-x-auto rounded-3xl border border-white/10 bg-night-800/70 shadow-card md:block">
+            <table className="w-full min-w-[960px] text-left text-sm">
               <thead className="border-b border-white/10 text-xs uppercase tracking-wider text-ink-subtle">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
@@ -223,7 +223,7 @@ export function ContactsPage() {
                   <th scope="col" className="px-4 py-3 font-medium">
                     Joined
                   </th>
-                  <th scope="col" className="px-4 py-3 font-medium">
+                  <th scope="col" className="w-32 whitespace-nowrap px-4 py-3 font-medium">
                     Consent
                   </th>
                 </tr>
@@ -247,7 +247,7 @@ export function ContactsPage() {
                       {c.last_check_in_at ? dateFormat.format(new Date(c.last_check_in_at)) : '—'}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{dateFormat.format(new Date(c.joined_at))}</td>
-                    <td className="px-4 py-3">
+                    <td className="w-32 whitespace-nowrap px-4 py-3">
                       <ConsentBadge consent={c.marketing_consent} />
                     </td>
                   </tr>

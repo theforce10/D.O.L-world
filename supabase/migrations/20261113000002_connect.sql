@@ -1,16 +1,8 @@
--- Mix & Mingle Connect: after the host ends the event, checked-in guests who
--- chose to be findable can say "I'd like to connect". Only mutual requests
--- reveal Snapchat handles. Requests are never shown to the other person unless
--- they're mutual. Block and report everywhere.
 
--- Snapchat is back, optional. Same rules as before: 3–15 chars, starts with a
--- letter, ends with a letter/number; letters, numbers, '.', '_', '-' between.
 alter table public.profiles
   add column snapchat text check (snapchat ~ '^[A-Za-z][A-Za-z0-9._-]{1,13}[A-Za-z0-9]$');
 grant update (snapchat) on public.profiles to authenticated;
 
--- Ending: closes check-in, topics and polls, clears the screen, starts the
--- 72-hour Connect window.
 create function public.end_event(p_event_id uuid)
 returns timestamptz
 language plpgsql
@@ -36,7 +28,6 @@ begin
 end;
 $$;
 
--- Going live again re-opens an ended event (and closes its Connect window).
 create or replace function public.set_active_event(p_event_id uuid)
 returns void
 language plpgsql
@@ -112,8 +103,6 @@ create table public.reports (
 create index reports_reported_idx on public.reports (reported);
 create index reports_created_idx on public.reports (created_at desc);
 
--- RLS: no client reads or writes on requests and blocks at all; everything
--- goes through the functions below. Reports are readable by admins only.
 alter table public.connect_requests enable row level security;
 alter table public.blocks enable row level security;
 alter table public.reports enable row level security;
@@ -141,7 +130,6 @@ as $$
   );
 $$;
 
--- Common checks: signed in, checked in to this event, Connect window open.
 create function public.assert_can_connect(p_event_id uuid)
 returns uuid
 language plpgsql
@@ -165,8 +153,6 @@ begin
 end;
 $$;
 
--- People you can connect with: checked in to this event, findable, not you,
--- no block either way. First name + avatar only.
 create function public.connect_candidates(p_event_id uuid)
 returns table (user_id uuid, first_name text, avatar_url text, requested boolean, matched boolean)
 language plpgsql
@@ -194,7 +180,6 @@ begin
 end;
 $$;
 
--- "I'd like to connect". Returns true when it's a match.
 create function public.request_connect(p_event_id uuid, p_to_user uuid)
 returns boolean
 language plpgsql
@@ -225,7 +210,6 @@ begin
 end;
 $$;
 
--- Take back a request that hasn't matched yet.
 create function public.withdraw_connect(p_event_id uuid, p_to_user uuid)
 returns void
 language plpgsql
@@ -242,7 +226,6 @@ begin
 end;
 $$;
 
--- Unmatch hides the handle from both sides. Works after the window closes too.
 create function public.unmatch(p_event_id uuid, p_other uuid)
 returns void
 language plpgsql
@@ -261,7 +244,6 @@ begin
 end;
 $$;
 
--- Mutual matches only, with handles. Stays readable after the window closes.
 create function public.my_matches(p_event_id uuid)
 returns table (user_id uuid, first_name text, avatar_url text, snapchat text, matched_at timestamptz)
 language plpgsql
@@ -296,7 +278,6 @@ begin
 end;
 $$;
 
--- Removes both people from each other's lists everywhere and undoes any match.
 create function public.block_user(p_user_id uuid)
 returns void
 language plpgsql
@@ -344,7 +325,6 @@ begin
 end;
 $$;
 
--- Mix & Mingle events you checked in to whose Connect window is open.
 create function public.my_connect_events()
 returns table (event_id uuid, name text, ended_at timestamptz, closes_at timestamptz)
 language sql
@@ -362,7 +342,6 @@ as $$
    order by e.ended_at desc;
 $$;
 
--- Admin moderation view. Admins see who reported whom.
 create function public.admin_reports()
 returns table (
   id             uuid,

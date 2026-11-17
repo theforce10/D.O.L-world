@@ -83,7 +83,7 @@ function SwipeStack({ topics, hasLiveTopic, onGoLive }: { topics: RecapTopic[]; 
   return (
     <div>
       <div className="relative">
-        {/* The cards peeking out behind make it read as a stack. */}
+
         {remaining > 0 && (
           <div aria-hidden className="absolute inset-x-3 -bottom-2 top-2 rounded-2xl border border-white/5 bg-night-700/60" />
         )}

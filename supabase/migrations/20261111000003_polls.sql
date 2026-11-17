@@ -1,4 +1,3 @@
--- Mix & Mingle live polls and the big-screen view.
 
 create type public.poll_status as enum ('draft', 'open', 'closed');
 
@@ -10,8 +9,6 @@ create table public.polls (
   status     public.poll_status not null default 'draft',
   opened_at  timestamptz,
   closed_at  timestamptz,
-  -- Kept by trigger. Every vote touches this row, which is how everyone gets
-  -- a realtime ping to refetch poll_results() (they can't see poll_votes).
   vote_count integer not null default 0 check (vote_count >= 0),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -19,7 +16,6 @@ create table public.polls (
 
 create index polls_event_idx on public.polls (event_id, created_at);
 create index polls_topic_idx on public.polls (topic_id);
--- One open poll per event at a time; open_poll() closes the previous one.
 create unique index polls_one_open_per_event on public.polls (event_id) where status = 'open';
 
 create trigger polls_set_updated_at
@@ -47,11 +43,9 @@ create table public.poll_votes (
 create index poll_votes_option_idx on public.poll_votes (option_id);
 create index poll_votes_user_idx on public.poll_votes (user_id);
 
--- The poll shown on /screen. Questions get their own slot in a later migration.
 alter table public.events
   add column screen_poll_id uuid references public.polls (id) on delete set null;
 
--- Vote counter + realtime ping.
 create function public.handle_poll_vote()
 returns trigger
 language plpgsql
@@ -74,8 +68,6 @@ create trigger poll_votes_after_change
   after insert or update or delete on public.poll_votes
   for each row execute function public.handle_poll_vote();
 
--- RLS: polls and options hold no personal data. Guests see open/closed polls
--- of the live event. Votes are only ever readable by the voter.
 alter table public.polls enable row level security;
 alter table public.poll_options enable row level security;
 alter table public.poll_votes enable row level security;
@@ -87,7 +79,6 @@ revoke all on public.poll_votes from anon, authenticated;
 grant select on public.polls to anon, authenticated;
 grant select on public.poll_options to anon, authenticated;
 grant select on public.poll_votes to authenticated;
--- Creating/editing goes through RPCs so a poll and its options are saved together.
 grant delete on public.polls to authenticated;
 
 create policy "Anyone can read open and closed polls of the live event"
@@ -108,7 +99,6 @@ create policy "Admins can delete polls"
   to authenticated
   using ((select public.is_admin()));
 
--- Follows the polls policies above (the subquery runs with the caller's RLS).
 create policy "Anyone can read options of polls they can see"
   on public.poll_options for select
   to anon, authenticated
@@ -119,7 +109,6 @@ create policy "Users can read their own votes"
   to authenticated
   using (user_id = (select auth.uid()));
 
--- Shared checks for the admin RPCs.
 create function public.assert_admin()
 returns void
 language plpgsql
@@ -195,7 +184,6 @@ begin
 end;
 $$;
 
--- Drafts only: once people can vote, options are fixed.
 create function public.update_poll(p_poll_id uuid, p_question text, p_options text[], p_topic_id uuid default null)
 returns void
 language plpgsql
@@ -227,8 +215,6 @@ begin
 end;
 $$;
 
--- Opens a poll (closing any other open poll in the event). Re-opening a
--- closed poll keeps its votes.
 create function public.open_poll(p_poll_id uuid)
 returns void
 language plpgsql
@@ -268,7 +254,6 @@ begin
 end;
 $$;
 
--- Pass null to clear the screen.
 create function public.show_poll_on_screen(p_event_id uuid, p_poll_id uuid)
 returns void
 language plpgsql
@@ -286,7 +271,6 @@ begin
 end;
 $$;
 
--- One vote per checked-in guest per poll; calling again changes the vote.
 create function public.cast_vote(p_poll_id uuid, p_option_id uuid)
 returns void
 language plpgsql
@@ -325,8 +309,6 @@ begin
 end;
 $$;
 
--- Counts and percentages only, never who voted. Anyone can read results of
--- open/closed polls in the live event; admins can read any poll's.
 create function public.poll_results(p_poll_id uuid)
 returns table (option_id uuid, label text, option_position integer, votes integer, percent integer)
 language sql

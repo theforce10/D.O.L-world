@@ -1,11 +1,9 @@
--- Song requests and race-safe queue numbering.
 
 create type public.request_status as enum ('waiting', 'up_next', 'singing', 'sung', 'skipped');
 
 create table public.song_requests (
   id           uuid primary key default gen_random_uuid(),
   event_id     uuid not null references public.events (id) on delete restrict,
-  -- References profiles (not auth.users) so PostgREST can embed the attendee's profile.
   user_id      uuid not null references public.profiles (id) on delete cascade,
   song_title   text not null check (char_length(btrim(song_title)) between 1 and 150),
   artist       text not null check (char_length(btrim(artist)) between 1 and 150),
@@ -20,7 +18,6 @@ create table public.song_requests (
 create index song_requests_user_id_idx on public.song_requests (user_id);
 create index song_requests_event_status_idx on public.song_requests (event_id, status, queue_number);
 
--- One song in the queue per person per event; they can submit again once it's sung or skipped.
 create unique index song_requests_one_active_per_user
   on public.song_requests (event_id, user_id)
   where status in ('waiting', 'up_next', 'singing');
@@ -29,10 +26,6 @@ create trigger song_requests_set_updated_at
   before update on public.song_requests
   for each row execute function public.set_updated_at();
 
--- BEFORE INSERT: the database assigns the number.
--- The UPDATE ... RETURNING takes a row lock on the event, so concurrent inserts
--- for the same event queue up behind each other and each gets the next number.
--- If the insert fails afterwards, the increment rolls back with it (no gaps).
 create function public.assign_queue_number()
 returns trigger
 language plpgsql
@@ -42,7 +35,6 @@ as $$
 declare
   v_number integer;
 begin
-  -- Never trust client-supplied values for these.
   if auth.uid() is not null then
     new.user_id := auth.uid();
   end if;
@@ -89,11 +81,6 @@ create trigger song_requests_assign_queue_number
   before insert on public.song_requests
   for each row execute function public.assign_queue_number();
 
--- BEFORE UPDATE OF status: keep the queue consistent and notify listeners.
---   * Only one 'singing' row per event; it becomes events.current_number.
---   * Only one 'up_next' row per event.
---   * Any status change touches the event row, so attendees (who can't see
---     other people's rows) get a realtime ping and refetch get_queue_status().
 create function public.handle_status_change()
 returns trigger
 language plpgsql
@@ -127,14 +114,11 @@ create trigger song_requests_handle_status_change
   before update of status on public.song_requests
   for each row execute function public.handle_status_change();
 
--- RLS
 alter table public.song_requests enable row level security;
 
 revoke all on public.song_requests from anon, authenticated;
 grant select on public.song_requests to authenticated;
--- Clients can't send user_id, queue_number or status at all.
 grant insert (event_id, song_title, artist, note) on public.song_requests to authenticated;
--- Only status is editable, and the policy restricts that to admins.
 grant update (status) on public.song_requests to authenticated;
 
 create policy "Users can read their own requests"

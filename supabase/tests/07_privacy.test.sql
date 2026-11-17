@@ -1,6 +1,3 @@
--- Security checklist: guests can never read rows containing user_id, and
--- Mix & Mingle RPCs never return phone numbers or emails.
--- Run with: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();
@@ -18,14 +15,12 @@ select throws_ok($$ select * from public.song_requests $$, '42501', null, 'anon 
 select throws_ok($$ select * from public.admins $$, '42501', null, 'anon cannot read admins');
 reset role;
 
--- Every table in public has RLS on.
 select is_empty(
   $$ select c.relname from pg_class c join pg_namespace n on n.oid = c.relnamespace
       where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity $$,
   'RLS is enabled on every table'
 );
 
--- Guest-facing Mix & Mingle RPCs: no phone, email or full name columns.
 select is_empty(
   $$ select p.proname, a.name
        from pg_proc p
@@ -42,7 +37,6 @@ select is_empty(
   'host_questions has no user_id column'
 );
 
--- Anon can only call the public read RPCs.
 select ok(has_function_privilege('anon', 'public.poll_results(uuid)', 'execute'), 'anon can read poll results');
 select ok(has_function_privilege('anon', 'public.event_recap(uuid)', 'execute'), 'anon can read the recap');
 select ok(not has_function_privilege('anon', 'public.cast_vote(uuid, uuid)', 'execute'), 'anon cannot vote');

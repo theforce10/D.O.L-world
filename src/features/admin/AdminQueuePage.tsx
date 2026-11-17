@@ -197,7 +197,7 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
     if (confirm === 'end' && event.type === 'mix_mingle') {
       return endEvent.mutate(event.id, {
         onSuccess: () => {
-          toast.success(`${event.name} has ended. Connect is open for 72 hours.`)
+          toast.success(`${event.name} has ended. Connect is open for 30 hours.`)
           setConfirm(null)
         },
         onError: (error) => toast.error(errorMessage(error, "Couldn't end the event.")),
@@ -285,7 +285,7 @@ function EventView({ event, events, liveEvent, onSelect, onCreate }: EventViewPr
           confirm === 'end'
             ? event.type === 'karaoke'
               ? 'Attendees will see "No event live" and can’t submit songs. The queue is kept. Next time you go live you can start a new night at #1.'
-              : 'Check-in, topics and polls close, and Connect opens for guests for 72 hours. Everything is kept.'
+              : 'Check-in, topics and polls close, and Connect stays open for guests for 30 hours. Everything is kept.'
             : event.ended_at
               ? 'This re-opens the event: guests can check in again, and Connect closes for it.'
               : hasNumbers
@@ -544,7 +544,7 @@ function MinglePanel({ event }: { event: AdminEvent }) {
       <Card className="flex flex-col justify-center gap-3 p-4 sm:p-5">
         <p className="text-sm text-ink-muted">
           {event.ended_at
-            ? 'This event has ended. Guests can use Connect for 72 hours after it ended.'
+            ? 'This event has ended. Guests can use Connect for 30 hours after it ended.'
             : event.is_active
               ? 'Run topics, polls and questions from your phone. Guests see changes instantly.'
               : 'Line up topics and polls now, then go live to open check-in.'}

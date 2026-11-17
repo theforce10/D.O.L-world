@@ -34,7 +34,7 @@ interface PollComposerProps {
   open: boolean
   onClose: () => void
   liveTopic: Topic | undefined
-  /** A draft to edit; omit to create a new poll. */
+
   poll?: Poll
 }
 

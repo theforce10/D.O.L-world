@@ -1,6 +1,3 @@
--- "What you missed": one public call for latecomers. Finished topics in order,
--- with the results of polls linked to each (counts only) and up to 3 approved
--- questions from that round. No user data.
 
 create function public.event_recap(p_event_id uuid)
 returns jsonb

@@ -3,7 +3,6 @@ import { toE164 } from '@/lib/phone'
 
 export const SNAPCHAT_PATTERN = /^[A-Za-z][A-Za-z0-9._-]{1,13}[A-Za-z0-9]$/
 
-/** Optional Snapchat username. A leading @ is dropped; '' means none. */
 export const snapchatField = z
   .string()
   .trim()

@@ -1,10 +1,7 @@
--- Connect: window, discoverability, mutual-only handles, block, report, unmatch.
--- Run with: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();
 
--- Admin + 5 guests: A, B, C findable; D checked in but hidden; E never checked in.
 insert into auth.users (id, email, raw_user_meta_data, aud, role) values
   ('00000000-0000-0000-0000-0000000000ad', 'admin@test.dev', '{"full_name":"Host Person"}', 'authenticated', 'authenticated'),
   ('00000000-0000-0000-0000-0000000000a1', 'a@test.dev', '{"full_name":"Ada Lovelace"}', 'authenticated', 'authenticated'),
@@ -24,10 +21,9 @@ insert into public.check_ins (event_id, user_id, age_confirmed, discoverable) va
   ('00000000-0000-0000-0000-00000000e001', '00000000-0000-0000-0000-0000000000c3', true, true),
   ('00000000-0000-0000-0000-00000000e001', '00000000-0000-0000-0000-0000000000d4', true, false);
 
--- Before the event ends, Connect is closed.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}';
-select throws_ok($$ select * from public.connect_candidates('00000000-0000-0000-0000-00000000e001') $$, 'P0001', 'Connect is closed for this event', 'closed until the host ends the event');
+select lives_ok($$ select * from public.connect_candidates('00000000-0000-0000-0000-00000000e001') $$, 'Connect is available while the event is live');
 select throws_ok($$ select public.end_event('00000000-0000-0000-0000-00000000e001') $$, '42501', null, 'guests cannot end the event');
 reset role;
 
@@ -38,7 +34,6 @@ reset role;
 select ok((select ended_at is not null and not is_active from public.events where id = '00000000-0000-0000-0000-00000000e001'), 'event is ended and inactive');
 select is((select count(*)::int from public.topics where status = 'live'), 0, 'ending the event finishes the live topic');
 
--- Who you see: findable, checked in, not you. First name + avatar only.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}';
 select results_eq(
@@ -67,7 +62,6 @@ select throws_ok($$ select * from public.connect_requests $$, '42501', null, 're
 select throws_ok($$ select * from public.blocks $$, '42501', null, 'blocks table is not readable directly');
 reset role;
 
--- B can't tell A asked.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000b2","role":"authenticated"}';
 select is(
@@ -102,7 +96,6 @@ select is(
 );
 reset role;
 
--- C (no match) sees nothing about A and B.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000c3","role":"authenticated"}';
 select is_empty($$ select * from public.my_matches('00000000-0000-0000-0000-00000000e001') $$, 'third party sees no one else''s match');
@@ -132,7 +125,6 @@ select is_empty($$ select * from public.reports $$, 'reporters cannot read repor
 select throws_ok($$ select * from public.admin_reports() $$, '42501', null, 'guests cannot open the reports page');
 reset role;
 
--- Block undoes a match.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000b2","role":"authenticated"}';
 select lives_ok($$ select public.block_user('00000000-0000-0000-0000-0000000000a1') $$, 'B blocks A');
@@ -143,7 +135,6 @@ set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","r
 select is_empty($$ select * from public.my_matches('00000000-0000-0000-0000-00000000e001') $$, 'block undoes the match for the blocked person');
 reset role;
 
--- Unmatch hides the handle on both sides.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000c3","role":"authenticated"}';
 select lives_ok($$ select public.request_connect('00000000-0000-0000-0000-00000000e001', '00000000-0000-0000-0000-0000000000b2') $$, 'C asks B');
@@ -159,7 +150,6 @@ set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000c3","r
 select is_empty($$ select * from public.my_matches('00000000-0000-0000-0000-00000000e001') $$, 'unmatched: C no longer sees B');
 reset role;
 
--- Outsiders, anon and admins.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000e5","role":"authenticated"}';
 select throws_ok($$ select * from public.connect_candidates('00000000-0000-0000-0000-00000000e001') $$, '42501', null, 'guests who did not check in cannot use Connect');
@@ -176,20 +166,25 @@ select is((select count(*)::int from public.admin_reports()), 1, 'admin sees the
 select is((select reported_name from public.admin_reports()), 'Cy Twombly', 'admin report names the reported person');
 reset role;
 
--- The window: 72 hours. Matches stay readable after it closes.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}';
 select is((select count(*)::int from public.my_connect_events()), 1, 'Connect event listed while open');
 reset role;
-update public.events set ended_at = now() - interval '73 hours' where id = '00000000-0000-0000-0000-00000000e001';
+update public.events set ended_at = now() - interval '29 hours' where id = '00000000-0000-0000-0000-00000000e001';
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}';
-select throws_ok($$ select * from public.connect_candidates('00000000-0000-0000-0000-00000000e001') $$, 'P0001', 'Connect is closed for this event', 'closed after 72 hours');
-select lives_ok($$ select * from public.my_matches('00000000-0000-0000-0000-00000000e001') $$, 'matches stay readable after the window');
-select is_empty($$ select * from public.my_connect_events() $$, 'Connect event no longer listed');
+select lives_ok($$ select * from public.connect_candidates('00000000-0000-0000-0000-00000000e001') $$, 'Connect remains open 29 hours after the event ends');
+select lives_ok($$ select * from public.my_matches('00000000-0000-0000-0000-00000000e001') $$, 'matches stay readable while the window is open');
+select is((select count(*)::int from public.my_connect_events()), 1, 'Connect event stays listed 29 hours after it ends');
+reset role;
+update public.events set ended_at = now() - interval '31 hours' where id = '00000000-0000-0000-0000-00000000e001';
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}';
+select throws_ok($$ select * from public.connect_candidates('00000000-0000-0000-0000-00000000e001') $$, 'P0001', 'Connect is closed for this event', 'closed after 30 hours');
+select lives_ok($$ select * from public.my_matches('00000000-0000-0000-0000-00000000e001') $$, 'matches stay readable after the window closes');
+select is_empty($$ select * from public.my_connect_events() $$, 'Connect event no longer listed after 30 hours');
 reset role;
 
--- Going live again re-opens the event.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000ad","role":"authenticated"}';
 select lives_ok($$ select public.set_active_event('00000000-0000-0000-0000-00000000e001') $$, 'admin re-activates');

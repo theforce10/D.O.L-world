@@ -17,7 +17,6 @@ function writeTime(key: string, value = Date.now()) {
   try {
     localStorage.setItem(key, String(value))
   } catch {
-    // Storage blocked: the catch-up just won't auto-open next time.
   }
 }
 
@@ -28,11 +27,6 @@ interface CatchUpInput {
   firstTopicStartedAt: string | null | undefined
 }
 
-/**
- * Opens "What you missed" automatically for: a first visit once topics have finished,
- * coming back after 15+ minutes away (reload or returning to the tab), or checking in
- * after the first topic went live. Always openable by hand.
- */
 export function useCatchUp({ eventId, doneCount, checkedInAt, firstTopicStartedAt }: CatchUpInput) {
   const [initial] = useState(() => {
     const now = Date.now()

@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { supabase } from './supabase'
 
-/** Milliseconds to add to Date.now() to get the database's clock. Fetched once per session. */
 export function useServerClockOffset(): number {
   const { data } = useQuery({
     queryKey: ['server-clock-offset'],
@@ -26,7 +25,6 @@ export interface Countdown {
   done: boolean
 }
 
-/** Ticks a countdown from startedAt + durationSeconds using server time. Null when there's no timer. */
 export function useCountdown(startedAt: string | null | undefined, durationSeconds: number | null | undefined): Countdown | null {
   const offset = useServerClockOffset()
   const [now, setNow] = useState(() => Date.now())

@@ -22,7 +22,6 @@ export function TopicQueue({ eventId, queued, inVote }: { eventId: string; queue
   const reorder = useReorderTopics(eventId)
   const remove = useDeleteTopic(eventId)
   const [editing, setEditing] = useState<Topic | null>(null)
-  // Only set while a drag is in progress; otherwise the cache (updated optimistically) is the order.
   const [dragOrder, setDragOrder] = useState<string[] | null>(null)
 
   const serverOrder = queued.map((t) => t.id)

@@ -8,7 +8,7 @@ export interface BarAction {
   Icon: LucideIcon
   onClick: () => void
   disabled?: boolean
-  /** Pulsing dot, e.g. a poll is open. */
+
   attention?: boolean
 }
 

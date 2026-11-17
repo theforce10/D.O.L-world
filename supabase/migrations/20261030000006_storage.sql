@@ -1,5 +1,3 @@
--- Avatars bucket. Public read (avatars are shown in the app), users may only
--- write inside a folder named after their own user id: avatars/<uid>/<file>.
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (

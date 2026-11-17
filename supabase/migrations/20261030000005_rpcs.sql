@@ -1,7 +1,4 @@
--- RPCs the frontend calls.
 
--- Public-safe queue status for attendees: numbers and counts only, never
--- names, phones or anyone else's song.
 create function public.get_queue_status(p_event_id uuid)
 returns table (
   event_id        uuid,
@@ -24,7 +21,6 @@ as $$
      where e.id = p_event_id
   ),
   mine as (
-    -- The caller's most relevant request: an active one first, else the latest.
     select r.id, r.queue_number, r.status
       from public.song_requests r
      where r.event_id = p_event_id
@@ -61,9 +57,6 @@ $$;
 revoke execute on function public.get_queue_status(uuid) from public, anon;
 grant execute on function public.get_queue_status(uuid) to authenticated;
 
--- "Call next" in one tap, atomically:
---   singing -> sung, up_next (or lowest waiting) -> singing, next waiting -> up_next.
--- Returns the new "now singing" number, or null if the queue is empty.
 create function public.call_next(p_event_id uuid)
 returns integer
 language plpgsql
@@ -78,7 +71,6 @@ begin
     raise exception 'Only admins can call the next singer' using errcode = '42501';
   end if;
 
-  -- Serialise double-taps / two admins pressing at once.
   perform 1 from public.events where id = p_event_id for update;
   if not found then
     raise exception 'Event not found' using errcode = 'P0002';
@@ -117,7 +109,6 @@ $$;
 revoke execute on function public.call_next(uuid) from public, anon;
 grant execute on function public.call_next(uuid) to authenticated;
 
--- One row per attendee for the Contacts page / CSV export.
 create function public.admin_contacts()
 returns table (
   user_id           uuid,

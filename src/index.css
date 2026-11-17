@@ -4,7 +4,6 @@
   --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* Neutral near-black surfaces so the accent alone says which event you're at. */
   --color-night-950: #09080b;
   --color-night-900: #0e0d11;
   --color-night-800: #17161b;
@@ -16,17 +15,11 @@
   --color-ink-muted: #cfc8bf;
   --color-ink-subtle: #a39c94;
 
-  /*
-   * One accent, switched by data-mode on <html> (or any element):
-   *   karaoke = yellow, mingle = red, neutral (no live event) = ivory.
-   * Never mix them on one screen. Use accent / accent-soft / accent-deep only.
-   */
   --color-accent: #f4efe8;
   --color-accent-soft: #ffffff;
   --color-accent-deep: #d9d1c6;
   --color-accent-glow: rgb(244 239 232 / 0.3);
 
-  /* Bloom tinted to the current surface (see data-surface below). Only used by SpotlightBg. */
   --color-surface-bloom: transparent;
 
   --color-lime: #b6ff5c;
@@ -73,13 +66,6 @@
     --shadow-glow-accent: 0 0 0 1px rgb(255 61 46 / 0.5), 0 0 28px -4px rgb(255 61 46 / 0.6);
   }
 
-  /*
-   * Surfaces: every area of the app gets its own deep tint instead of grey-black.
-   * Set on <html> by AccentModeProvider from the route (SURFACE_ROUTES in src/app/accent.tsx).
-   * They're surfaces, not accents: yellow and red both sit on every one, never together.
-   */
-
-  /* Velvet (plum): attendee front door (home, login, signup, password reset, onboarding). */
   [data-surface='velvet'] {
     --color-night-950: #100818;
     --color-night-900: #180c24;
@@ -90,7 +76,6 @@
     --color-surface-bloom: rgb(140 60 220 / 0.28);
   }
 
-  /* Midnight (deep navy): the attendee's own pages (profile, Connect). */
   [data-surface='midnight'] {
     --color-night-950: #060b1a;
     --color-night-900: #0a1226;
@@ -101,7 +86,6 @@
     --color-surface-bloom: rgb(60 110 240 / 0.24);
   }
 
-  /* Lagoon (deep teal): admin dashboard, contacts, reports. */
   [data-surface='lagoon'] {
     --color-night-950: #04110f;
     --color-night-900: #071916;
@@ -112,7 +96,6 @@
     --color-surface-bloom: rgb(20 180 160 / 0.2);
   }
 
-  /* Cosmos (indigo-violet blue): host console and the projector screen. */
   [data-surface='cosmos'] {
     --color-night-950: #0b0a1f;
     --color-night-900: #110f2c;
@@ -123,7 +106,6 @@
     --color-surface-bloom: rgb(100 90 255 / 0.26);
   }
 
-  /* Cocoa (warm espresso): legal pages and 404. */
   [data-surface='cocoa'] {
     --color-night-950: #120c08;
     --color-night-900: #1a120c;
@@ -145,6 +127,20 @@
     overflow-x: hidden;
   }
 
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
   h1,
   h2,
   h3 {
@@ -157,6 +153,32 @@
 
   ::selection {
     @apply bg-accent/40 text-ink;
+  }
+}
+
+@layer components {
+  .connect-person-card {
+    isolation: isolate;
+  }
+
+  .connect-person-card::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% -10%, color-mix(in srgb, var(--color-accent) 20%, transparent), transparent 58%),
+      linear-gradient(155deg, rgb(255 255 255 / 0.045), transparent 45%);
+    content: '';
+    opacity: 0.75;
+    transition: opacity 250ms ease;
+  }
+
+  .connect-person-card:hover::before {
+    opacity: 1;
+  }
+
+  .connect-person-card > div:not(button) {
+    filter: drop-shadow(0 0 18px color-mix(in srgb, var(--color-accent) 24%, transparent));
   }
 }
 

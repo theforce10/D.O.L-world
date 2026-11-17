@@ -8,7 +8,7 @@ interface ResultBarsProps {
   results: PollResult[]
   myOptionId?: string | null
   size?: 'md' | 'xl'
-  /** Tighter rows on the big screen when something else shares the column. */
+
   dense?: boolean
   className?: string
 }
@@ -54,7 +54,6 @@ export function ResultBars({ results, myOptionId, size = 'md', dense = false, cl
               <span
                 className={cn(
                   'flex min-w-0 items-center gap-2 font-semibold',
-                  // On phones the "You" chip wraps under a long option instead of squeezing it.
                   !xl && 'flex-wrap gap-y-1',
                   xl && (dense ? 'gap-[1vw] text-[1.6vw] leading-tight' : 'gap-[1vw] text-[2.6vw] leading-tight'),
                 )}

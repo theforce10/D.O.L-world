@@ -11,11 +11,6 @@ type Handlers = Partial<Record<Exclude<PendingActionKind, 'check_in'>, (payload?
 
 export const ONBOARDING_FROM_MINGLE = '/onboarding?next=%2F&consent=later'
 
-/**
- * Guests can look at everything, but voting, asking, connecting and checking in need an account,
- * a complete profile and (except check-in itself) a check-in. This walks them through whichever
- * step is missing, then finishes what they tapped. Survives the Google redirect via sessionStorage.
- */
 export function useMingleActions(eventId: string | undefined, handlers: Handlers) {
   const { session } = useAuth()
   const profile = useProfile()
@@ -79,7 +74,6 @@ export function useMingleActions(eventId: string | undefined, handlers: Handlers
     setSheet(null)
   }, [])
 
-  /** Call after a successful check-in: finishes the vote/ask/connect that led here, if any. */
   const afterCheckIn = useCallback(() => {
     setSheet(null)
     const pending = readPendingAction()

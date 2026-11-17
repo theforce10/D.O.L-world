@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import type { HostQuestion } from './api'
 
-/** Toasts once per new question, after the first load. */
 export function useNewQuestionAlert(questions: HostQuestion[] | undefined) {
   const seen = useRef<Set<string> | null>(null)
   useEffect(() => {

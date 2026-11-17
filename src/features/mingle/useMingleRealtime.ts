@@ -37,10 +37,8 @@ export function useMingleRealtime(eventId: string | undefined): LiveStatus {
       .channel(`mingle:${eventId}:${userId ?? 'guest'}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, () => {
         void queryClient.invalidateQueries({ queryKey: queueKeys.activeEvent })
-        // Question moderation bumps the event row; approved questions appear in the recap.
         void queryClient.invalidateQueries({ queryKey: recapKeys.event(eventId) })
       })
-    // Every vote pings the poll row; refetch results at most every 1.5s so a burst of votes stays cheap.
     const refreshPolls = throttle(() => {
       void queryClient.invalidateQueries({ queryKey: pollKeys.list(eventId) })
       void queryClient.invalidateQueries({ queryKey: pollKeys.allResults })
@@ -51,7 +49,6 @@ export function useMingleRealtime(eventId: string | undefined): LiveStatus {
       { event: '*', schema: 'public', table: 'polls', filter: `event_id=eq.${eventId}` },
       refreshPolls,
     )
-    // Realtime can't filter DELETE events, so listen to all poll deletes (rare: a host deleting a poll).
     channel = channel.on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'polls' }, refreshPolls)
     channel = channel.on('postgres_changes', { event: '*', schema: 'public', table: 'topics', filter: `event_id=eq.${eventId}` }, () => {
       void queryClient.invalidateQueries({ queryKey: topicKeys.list(eventId) })

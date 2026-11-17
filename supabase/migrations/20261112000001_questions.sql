@@ -1,13 +1,6 @@
--- Mix & Mingle anonymous questions to the host.
---
--- Anonymity model: the host and the room never see who asked. user_id is kept
--- only so abuse can be moderated (ban_question_author) and rate-limited.
--- Nobody but the asker can select from questions, admins included: the host
--- reads them through host_questions(), which never returns user_id.
 
 alter table public.profiles
   add column questions_banned boolean not null default false;
--- Not added to the client update grant on profiles: only ban_question_author() sets it.
 
 create type public.question_status as enum ('pending', 'approved', 'answered', 'hidden');
 
@@ -15,11 +8,9 @@ create table public.questions (
   id                 uuid primary key default gen_random_uuid(),
   event_id           uuid not null references public.events (id) on delete cascade,
   user_id            uuid not null default auth.uid() references public.profiles (id) on delete cascade,
-  -- The topic that was live when it was asked, for the catch-up recap.
   topic_id           uuid references public.topics (id) on delete set null,
   body               text not null check (char_length(btrim(body)) between 1 and 280),
   status             public.question_status not null default 'pending',
-  -- Set by the word filter. Flagged questions are highlighted for the host, never dropped.
   flagged            boolean not null default false,
   shown_on_screen_at timestamptz,
   created_at         timestamptz not null default now(),
@@ -36,11 +27,8 @@ create trigger questions_set_updated_at
 
 alter table public.events
   add column screen_question_id uuid references public.questions (id) on delete set null,
-  -- Bumped on every question change. Admins can't select questions, so this
-  -- event-row update is how the host console gets a realtime ping.
   add column questions_rev integer not null default 0;
 
--- A basic word filter. It only flags for the host to review.
 create function public.question_needs_review(p_body text)
 returns boolean
 language sql
@@ -64,7 +52,6 @@ declare
   v_count  integer;
   v_latest timestamptz;
 begin
-  -- Never trust client-supplied values for these.
   if auth.uid() is not null then
     new.user_id := auth.uid();
   end if;
@@ -81,7 +68,6 @@ begin
     raise exception 'Questions are closed for this event';
   end if;
 
-  -- Locks the asker's check-in so two quick taps can't both slip past the limits.
   perform 1 from public.check_ins where event_id = new.event_id and user_id = new.user_id for update;
   if not found then
     raise exception 'Join tonight to ask a question' using errcode = '42501';
@@ -128,7 +114,6 @@ create trigger questions_bump_rev
   after insert or update or delete on public.questions
   for each row execute function public.bump_questions_rev();
 
--- RLS
 alter table public.questions enable row level security;
 
 revoke all on public.questions from anon, authenticated;
@@ -145,7 +130,6 @@ create policy "Users can read their own questions"
   to authenticated
   using (user_id = (select auth.uid()));
 
--- Host view: everything the host needs, never who asked.
 create function public.host_questions(p_event_id uuid)
 returns table (
   id                 uuid,
@@ -171,7 +155,6 @@ begin
 end;
 $$;
 
--- Approve / hide / mark answered (or back to pending).
 create function public.moderate_question(p_question_id uuid, p_status public.question_status)
 returns void
 language plpgsql
@@ -190,8 +173,6 @@ begin
 end;
 $$;
 
--- Shows a question on /screen until replaced. Pass null to clear the screen.
--- Showing a pending question approves it.
 create function public.show_question_on_screen(p_event_id uuid, p_question_id uuid)
 returns void
 language plpgsql
@@ -213,9 +194,6 @@ begin
 end;
 $$;
 
--- Stops the author of a question from asking any more and hides everything
--- they've asked, without telling the host who it was. Returns how many
--- questions were hidden.
 create function public.ban_question_author(p_question_id uuid)
 returns integer
 language plpgsql
@@ -253,5 +231,4 @@ grant execute on function public.moderate_question(uuid, public.question_status)
 grant execute on function public.show_question_on_screen(uuid, uuid) to authenticated;
 grant execute on function public.ban_question_author(uuid) to authenticated;
 
--- Askers get live status updates on their own questions (RLS limits it to them).
 alter publication supabase_realtime add table public.questions;

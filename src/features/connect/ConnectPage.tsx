@@ -38,7 +38,6 @@ function closesIn(iso: string): string {
   return hours <= 1 ? 'under an hour' : `${hours}h`
 }
 
-/** Celebrates matches that appear while the page is open (including the other person's tap, via polling). */
 function useNewMatches(matches: Match[] | undefined, onNew: (m: Match) => void) {
   const seen = useRef<Set<string> | null>(null)
   useEffect(() => {
@@ -102,7 +101,9 @@ export function ConnectPage() {
           <h1 className="text-2xl font-extrabold sm:text-3xl">{event?.name ?? 'Mix & Mingle'}</h1>
           <p className="text-ink-muted">
             {event
-              ? `Tap “I'd like to connect” on anyone you clicked with. If they do too, you'll both see each other's Snapchat. Closes in ${closesIn(event.closes_at)}.`
+              ? event.ended_at
+                ? `Tap “I'd like to connect” on anyone you clicked with. If they do too, you'll both see each other's Snapchat. Closes in ${closesIn(event.closes_at)}.`
+                : `The event is live. Connect with people as the night unfolds; this stays open until 30 hours after the event ends.`
               : closed
                 ? 'Connect has closed for this event. Your matches are still here.'
                 : 'Say who you clicked with. Only mutual matches are revealed.'}
@@ -176,7 +177,7 @@ export function ConnectPage() {
                 <Card>
                   {closed ? (
                     <EmptyState icon={<Lock className="size-8" />} title="Connect has closed">
-                      <p>It stays open for 72 hours after the event ends.</p>
+                      <p>It stays open while the event is live and for 30 hours after it ends.</p>
                     </EmptyState>
                   ) : (
                     <ErrorState message={errorMessage(candidates.error, "Couldn't load Connect.")} onRetry={() => candidates.refetch()} />
@@ -276,7 +277,7 @@ function CandidateCard({ person, busy, onConnect, onWithdraw, onMatched, onMore 
   return (
     <div
       className={cn(
-        'relative flex h-full flex-col items-center gap-3 rounded-3xl border bg-night-800/70 p-4 pt-6 text-center shadow-card transition-colors',
+        'connect-person-card group relative flex h-full flex-col items-center gap-3 overflow-hidden rounded-3xl border bg-night-800/75 p-4 pt-6 text-center shadow-card backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-glow-accent sm:p-5 sm:pt-7',
         person.matched ? 'border-accent/60' : person.requested ? 'border-accent/30' : 'border-white/10',
       )}
     >

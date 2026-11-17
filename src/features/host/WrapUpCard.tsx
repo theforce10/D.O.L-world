@@ -14,7 +14,7 @@ export function WrapUpCard({ eventId, endedAt }: { eventId: string; endedAt: str
   const [confirm, setConfirm] = useState(false)
 
   if (endedAt) {
-    const closes = new Date(new Date(endedAt).getTime() + 72 * 3_600_000)
+    const closes = new Date(new Date(endedAt).getTime() + 30 * 3_600_000)
     return (
       <Card className="flex items-center gap-3 p-4">
         <HeartHandshake aria-hidden className="size-6 shrink-0 text-accent" />
@@ -29,7 +29,7 @@ export function WrapUpCard({ eventId, endedAt }: { eventId: string; endedAt: str
     <Card className="space-y-3 p-4 sm:p-5">
       <h2 className="text-lg font-bold">Wrap up</h2>
       <p className="text-sm text-ink-muted">
-        When the night's over, end the event. Check-in closes, the live topic and poll finish, and Connect opens for 72 hours.
+        When the night's over, end the event. Check-in closes, the live topic and poll finish, and Connect stays open for 30 hours.
       </p>
       <Button variant="danger" fullWidth onClick={() => setConfirm(true)}>
         <Flag aria-hidden className="size-4" /> End event
@@ -38,7 +38,7 @@ export function WrapUpCard({ eventId, endedAt }: { eventId: string; endedAt: str
         open={confirm}
         onClose={() => setConfirm(false)}
         title="End the event?"
-        description="Guests can't check in, vote or ask any more. Connect opens straight away and stays open for 72 hours. Going live again later re-opens the event and closes Connect."
+        description="Guests can't check in, vote or ask any more. Connect stays open for 30 hours. Going live again later re-opens the event and closes Connect."
       >
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button variant="ghost" onClick={() => setConfirm(false)}>

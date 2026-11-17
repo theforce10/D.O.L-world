@@ -102,7 +102,7 @@ export function MingleHome({ event }: { event: MingleEvent }) {
       {session ? <AppHeader /> : <GuestHeader onLogIn={() => setLoginOnly(true)} />}
       <ConnectionBadge status={live} />
       <motion.main variants={stagger} initial="hidden" animate="show" className="mx-auto w-full max-w-xl space-y-5 px-4 pb-36 pt-5">
-        {session && <ConnectBanner />}
+        {session && checkedIn && <ConnectBanner eventId={event.id} name={event.name} />}
         <motion.div variants={rise} className="space-y-1">
           {firstName && <p className="text-ink-muted">Hey {firstName} 👋</p>}
           <EventHeading
@@ -376,7 +376,6 @@ function CheckedInCard({ eventId, discoverable, celebrate }: { eventId: string; 
   )
 }
 
-/** The open poll, or the last closed one while its round is still on screen. */
 function currentPoll(polls: Poll[] | undefined, topics: Topic[] | undefined): Poll | undefined {
   if (!polls) return undefined
   const open = polls.find((p) => p.status === 'open')

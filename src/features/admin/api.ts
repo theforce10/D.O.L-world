@@ -209,7 +209,6 @@ export function useResolveReport() {
   })
 }
 
-/** Mix & Mingle: closes check-in, topics and polls, and opens Connect for 72 hours. */
 export function useEndEvent() {
   const queryClient = useQueryClient()
   return useMutation({

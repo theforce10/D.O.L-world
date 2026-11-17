@@ -1,4 +1,4 @@
-/** Runs fn at most once per `ms`, always including a trailing call so the last change is never missed. */
+
 export function throttle(fn: () => void, ms: number): (() => void) & { cancel: () => void } {
   let last = 0
   let timer: ReturnType<typeof setTimeout> | undefined

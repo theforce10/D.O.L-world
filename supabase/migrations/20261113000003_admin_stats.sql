@@ -1,8 +1,6 @@
--- Admin: attendance by event type on Contacts, and Mix & Mingle event stats.
 
 drop function public.admin_contacts();
 
--- Karaoke attendance = events you submitted a song at; Mix & Mingle = events you checked in to.
 create function public.admin_contacts()
 returns table (
   user_id           uuid,
@@ -64,8 +62,6 @@ $$;
 revoke execute on function public.admin_contacts() from public, anon;
 grant execute on function public.admin_contacts() to authenticated;
 
--- Numbers for a Mix & Mingle event card. Participation = share of checked-in
--- guests who voted in at least one poll.
 create function public.event_stats(p_event_id uuid)
 returns table (check_ins integer, voters integer, participation integer, questions integer, polls integer, matches integer)
 language plpgsql

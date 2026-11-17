@@ -1,5 +1,3 @@
--- Live polls: one vote per checked-in guest, open polls only, counts only.
--- Run with: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();

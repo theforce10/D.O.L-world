@@ -15,7 +15,8 @@ export function useMyConnectEvents() {
   return useQuery({
     queryKey: connectKeys.events(user?.id),
     enabled: Boolean(user),
-    staleTime: 60_000,
+    staleTime: 10_000,
+    refetchInterval: 30_000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('my_connect_events')
       if (error) throw error
@@ -31,6 +32,7 @@ export function useConnectCandidates(eventId: string | undefined) {
     queryKey: connectKeys.candidates(eventId),
     enabled: Boolean(eventId),
     retry: false,
+    refetchInterval: 15_000,
     queryFn: async () => {
       const { data, error } = await supabase.rpc('connect_candidates', { p_event_id: eventId! })
       if (error) throw error
@@ -41,7 +43,6 @@ export function useConnectCandidates(eventId: string | undefined) {
 
 export type Candidate = NonNullable<ReturnType<typeof useConnectCandidates>['data']>[number]
 
-/** Polls: requests aren't readable by clients, so there's no realtime for a new match. */
 export function useMyMatches(eventId: string | undefined) {
   return useQuery({
     queryKey: connectKeys.matches(eventId),

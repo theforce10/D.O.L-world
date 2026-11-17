@@ -1,14 +1,11 @@
--- Mix & Mingle live topic cards.
 
 create type public.topic_status as enum ('queued', 'live', 'done');
 
 create table public.topics (
   id               uuid primary key default gen_random_uuid(),
   event_id         uuid not null references public.events (id) on delete cascade,
-  -- Assigned by trigger on insert; changed only by reorder_topics().
   position         integer not null default 0,
   prompt           text not null check (char_length(btrim(prompt)) between 1 and 300),
-  -- null = no timer.
   duration_seconds integer check (duration_seconds between 30 and 7200),
   status           public.topic_status not null default 'queued',
   started_at       timestamptz,
@@ -19,15 +16,12 @@ create table public.topics (
 
 create index topics_event_order_idx on public.topics (event_id, position, created_at);
 
--- At most one live topic per event.
 create unique index topics_one_live_per_event on public.topics (event_id) where status = 'live';
 
 create trigger topics_set_updated_at
   before update on public.topics
   for each row execute function public.set_updated_at();
 
--- New topics go to the end of the list. Multi-row inserts (paste import) see
--- the rows inserted before them, so they keep their order.
 create function public.prepare_topic()
 returns trigger
 language plpgsql
@@ -47,18 +41,14 @@ create trigger topics_prepare
   before insert on public.topics
   for each row execute function public.prepare_topic();
 
--- RLS
 alter table public.topics enable row level security;
 
 revoke all on public.topics from anon, authenticated;
 grant select on public.topics to anon, authenticated;
--- status/timestamps/position only change through the RPCs below.
 grant insert (event_id, prompt, duration_seconds) on public.topics to authenticated;
 grant update (prompt, duration_seconds) on public.topics to authenticated;
 grant delete on public.topics to authenticated;
 
--- Topics hold no personal data. Guests see the live topic and past ones for
--- the live event, never the host's upcoming list.
 create policy "Anyone can read started topics of the live event"
   on public.topics for select
   to anon, authenticated
@@ -88,7 +78,6 @@ create policy "Admins can delete queued topics"
   to authenticated
   using ((select public.is_admin()) and status = 'queued');
 
--- Server clock, so phones with a wrong clock still count down correctly.
 create function public.server_now()
 returns timestamptz
 language sql
@@ -100,8 +89,6 @@ $$;
 
 grant execute on function public.server_now() to anon, authenticated;
 
--- "Next topic": current live -> done, next queued -> live, atomically.
--- Returns the new live topic id, or null when nothing is left.
 create function public.advance_topic(p_event_id uuid)
 returns uuid
 language plpgsql
@@ -115,7 +102,6 @@ begin
     raise exception 'Only admins can run topics' using errcode = '42501';
   end if;
 
-  -- Serialise double-taps / two hosts.
   perform 1 from public.events where id = p_event_id for update;
   if not found then
     raise exception 'Event not found' using errcode = 'P0002';
@@ -143,7 +129,6 @@ begin
 end;
 $$;
 
--- "End round": finish the live topic without starting another.
 create function public.end_round(p_event_id uuid)
 returns void
 language plpgsql
@@ -161,8 +146,6 @@ begin
 end;
 $$;
 
--- "+2 min": extends the live topic. With no timer (or after time's up),
--- the countdown restarts from now.
 create function public.extend_topic(p_topic_id uuid, p_seconds integer default 120)
 returns void
 language plpgsql
@@ -190,7 +173,6 @@ begin
 end;
 $$;
 
--- Saves a new order for the queued topics (ids in the order they should run).
 create function public.reorder_topics(p_event_id uuid, p_topic_ids uuid[])
 returns void
 language plpgsql
@@ -204,7 +186,6 @@ begin
 
   perform 1 from public.events where id = p_event_id for update;
 
-  -- Queued topics go after everything that has already started.
   update public.topics t
      set position = base.max_started + o.ord
     from unnest(p_topic_ids) with ordinality as o (id, ord),

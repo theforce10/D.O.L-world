@@ -87,7 +87,6 @@ export const topicKeys = {
 
 export const TOPIC_SELECT = 'id, event_id, position, prompt, duration_seconds, status, started_at, ended_at, created_at'
 
-/** Guests get live + done topics (RLS); admins also get the queued ones. Ordered as they run. */
 export function useTopics(eventId: string | undefined) {
   return useQuery({
     queryKey: topicKeys.list(eventId),
@@ -115,7 +114,6 @@ export const pollKeys = {
   myVote: (pollId: string | undefined, userId: string | undefined) => ['mingle', 'my-vote', pollId, userId] as const,
 }
 
-/** Guests get open + closed polls of the live event (RLS); admins also get drafts. Newest first. */
 export function usePolls(eventId: string | undefined) {
   return useQuery({
     queryKey: pollKeys.list(eventId),
@@ -137,12 +135,10 @@ export function usePolls(eventId: string | undefined) {
 
 export type Poll = NonNullable<ReturnType<typeof usePolls>['data']>[number]
 
-/** The open "pick the next topic" vote, if the host is running one. */
 export function openTopicVote(polls: Poll[] | undefined): Poll | undefined {
   return polls?.find((p) => p.kind === 'topic' && p.status === 'open')
 }
 
-/** Normal polls only (topic votes are shown separately). */
 export function normalPolls(polls: Poll[] | undefined): Poll[] {
   return (polls ?? []).filter((p) => p.kind === 'poll')
 }

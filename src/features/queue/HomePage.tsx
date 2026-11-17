@@ -9,7 +9,6 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { ErrorState } from '@/components/ui/States'
 import type { RequestStatus } from '@/lib/types'
 import { cn, errorMessage } from '@/lib/utils'
-import { ConnectBanner } from '@/features/connect/ConnectBanner'
 import { useProfile } from '@/features/profile/api'
 import { queueKeys, useActiveEvent, useMyActiveRequest, useQueueStatus, useSubmitSong } from './api'
 import { LiveStatus, UpNextAlert } from './LiveStatus'
@@ -67,7 +66,6 @@ export function HomePage() {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-xl space-y-5 px-4 pb-16 pt-5">
-        <ConnectBanner />
         <motion.div {...section} className="space-y-1">
           <p className="text-ink-muted">Hey {firstName ?? 'there'} 👋</p>
           {event.data && <EventHeading name={event.data.name} venue={event.data.venue} eventDate={event.data.event_date} />}

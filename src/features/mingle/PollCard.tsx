@@ -28,7 +28,6 @@ export function PollCard({ poll, voting, onVote }: PollCardProps) {
   const open = poll.status === 'open'
   const topicVote = poll.kind === 'topic'
   const [picked, setPicked] = useState<string | null>(null)
-  // The vote the guest started changing from. Once the saved vote differs, we're back to results.
   const [changingFrom, setChangingFrom] = useState<string | null>(null)
   const changing = changingFrom !== null && changingFrom === mine
   const [peek, setPeek] = useState(false)

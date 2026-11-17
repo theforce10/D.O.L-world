@@ -21,7 +21,6 @@ interface StartTopicVoteDialogProps {
   onClose: () => void
 }
 
-/** Host picks 2–6 queued topics for guests to vote on. */
 export function StartTopicVoteDialog({ eventId, open, queued, onClose }: StartTopicVoteDialogProps) {
   return (
     <Dialog
@@ -86,7 +85,6 @@ function TopicPicker({ eventId, queued, onDone }: { eventId: string; queued: Top
   )
 }
 
-/** Live results while guests vote, with "Start winner" (or a pick between tied topics). */
 export function TopicVoteControl({ eventId, vote }: { eventId: string; vote: Poll }) {
   const results = usePollResults(vote.id)
   const finish = useFinishTopicVote(eventId)

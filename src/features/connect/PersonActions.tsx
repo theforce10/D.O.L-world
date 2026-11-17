@@ -17,7 +17,6 @@ interface PersonActionsProps {
   onClose: () => void
 }
 
-/** Block / Report sheet for one person. */
 export function PersonActions({ eventId, person, onClose }: PersonActionsProps) {
   const [view, setView] = useState<'menu' | 'report' | 'block'>('menu')
   const close = () => {

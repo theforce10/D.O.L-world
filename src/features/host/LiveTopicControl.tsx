@@ -16,7 +16,7 @@ interface LiveTopicControlProps {
   live: Topic | undefined
   queued: Topic[]
   number: number
-  /** The open "pick the next topic" vote, if any. */
+
   topicVote: Poll | undefined
 }
 

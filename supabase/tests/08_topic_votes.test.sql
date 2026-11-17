@@ -1,5 +1,3 @@
--- Topic votes: host puts queued topics to a vote, guests vote, host starts the winner.
--- Run with: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();
@@ -18,7 +16,6 @@ insert into public.topics (id, event_id, prompt) values
   ('00000000-0000-0000-0000-0000000000f3', '00000000-0000-0000-0000-00000000e001', 'Third'),
   ('00000000-0000-0000-0000-0000000000f4', '00000000-0000-0000-0000-00000000e001', 'Fourth');
 
--- Guests can't start or finish votes.
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}';
 select throws_ok(
@@ -56,7 +53,6 @@ update public.topics set prompt = 'Third, edited' where id = '00000000-0000-0000
 select is((select label from public.poll_options where topic_id = '00000000-0000-0000-0000-0000000000f3'), 'Third, edited', 'editing a topic updates its vote label');
 reset role;
 
--- Guests can see the vote and its options, and vote once they're checked in.
 set local role anon;
 set local request.jwt.claims = '{"role":"anon"}';
 select is((select count(*)::int from public.poll_options o join public.polls p on p.id = o.poll_id where p.kind = 'topic'), 2, 'guests can read vote options');
@@ -103,7 +99,6 @@ select lives_ok($$ select public.advance_topic('00000000-0000-0000-0000-00000000
 select is((select prompt from public.topics where status = 'live'), 'Second', 'next queued topic is live');
 select is((select polls from public.event_stats('00000000-0000-0000-0000-00000000e001')), 1, 'stats count normal polls only');
 
--- Cancelling: votes deleted, poll closed without a winner, topics stay queued.
 select throws_ok(
   $$ select public.start_topic_vote('00000000-0000-0000-0000-00000000e001', array['00000000-0000-0000-0000-0000000000f3', '00000000-0000-0000-0000-0000000000f1']::uuid[]) $$,
   'P0001', null, 'done topics cannot go to a vote'
@@ -136,7 +131,6 @@ select throws_ok($$ select public.cancel_topic_vote((select id from public.polls
 select lives_ok($$ select public.advance_topic('00000000-0000-0000-0000-00000000e001') $$, 'Next topic works after cancel');
 reset role;
 
--- As superuser: the admin can't read other people's votes.
 select is((select count(*)::int from public.poll_votes v join public.polls p on p.id = v.poll_id where p.kind = 'topic' and p.topic_id is null), 0, 'cancelled vote has no votes left');
 select is((select count(*)::int from public.poll_votes v join public.polls p on p.id = v.poll_id where p.kind = 'topic' and p.topic_id = '00000000-0000-0000-0000-0000000000f4'), 1, 'cancel twice leaves other votes alone');
 

@@ -1,4 +1,3 @@
--- Check-ins and guest access to events. Run with: npx supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();

@@ -38,7 +38,6 @@ export function QuestionList({ eventId, questions, screenQuestionId }: QuestionL
     QuestionStatus,
     number
   >
-  // Oldest first for new questions, so the host works through them in order.
   const visible = questions
     .filter((q) => q.status === filter)
     .sort((a, b) => (filter === 'pending' ? a.created_at.localeCompare(b.created_at) : 0))

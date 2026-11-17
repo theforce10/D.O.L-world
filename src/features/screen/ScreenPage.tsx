@@ -29,7 +29,6 @@ export function ScreenPage() {
   const live = started.find((t) => t.status === 'live')
   const topicVote = openTopicVote(polls.data)
   const pollsOnly = normalPolls(polls.data)
-  // A running topic vote takes the poll slot: it only lasts a minute or two.
   const poll = topicVote ?? pollsOnly.find((p) => p.id === event.data?.screen_poll_id) ?? pollsOnly.find((p) => p.status === 'open')
   const question = questions.data?.find((q) => q.id === event.data?.screen_question_id && q.status !== 'hidden')
   const joinUrl = absoluteUrl('/')
@@ -207,12 +206,10 @@ function ScreenPoll({ poll, dense }: { poll: Poll; dense: boolean }) {
   )
 }
 
-/** Topic votes and polls with long options use the compact rows so every option fits. */
 function isWordy(poll: Poll): boolean {
   return poll.kind === 'topic' || poll.options.some((o) => o.label.length > 60)
 }
 
-/** Long prompts shrink so they always fit on a 16:9 screen. */
 function topicSize(prompt: string): string {
   if (prompt.length <= 70) return 'text-[4.4vw]'
   if (prompt.length <= 130) return 'text-[3.4vw]'

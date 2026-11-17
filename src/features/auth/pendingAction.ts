@@ -14,7 +14,6 @@ export function savePendingAction(action: Omit<PendingAction, 'savedAt'>) {
   try {
     sessionStorage.setItem(KEY, JSON.stringify({ ...action, savedAt: Date.now() }))
   } catch {
-    // Private mode or storage blocked: the guest just taps the button again after signing in.
   }
 }
 
@@ -37,6 +36,5 @@ export function clearPendingAction() {
   try {
     sessionStorage.removeItem(KEY)
   } catch {
-    // Nothing to clear.
   }
 }

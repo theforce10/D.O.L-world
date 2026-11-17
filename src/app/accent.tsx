@@ -5,7 +5,6 @@ import { accentFor, SetAccentOverride, type AccentMode } from './accentMode'
 
 type Surface = 'velvet' | 'midnight' | 'lagoon' | 'cosmos' | 'cocoa'
 
-/** Browser chrome colour per surface (matches --color-night-900 for that surface in index.css). */
 const SURFACE_THEME_COLOR: Record<Surface, string> = {
   velvet: '#180c24',
   midnight: '#0a1226',
@@ -14,10 +13,8 @@ const SURFACE_THEME_COLOR: Record<Surface, string> = {
   cocoa: '#1a120c',
 }
 
-/** Attendee front-door pages get the plum "velvet" surface. */
 const VELVET_PATHS = new Set(['/', '/login', '/signup', '/forgot-password', '/reset-password', '/onboarding'])
 
-/** Every area gets its own tinted surface instead of grey-black (see index.css). */
 function surfaceFor(pathname: string): Surface {
   if (VELVET_PATHS.has(pathname)) return 'velvet'
   if (pathname.startsWith('/screen/') || /^\/admin\/events\/[^/]+\/host/.test(pathname)) return 'cosmos'
@@ -26,7 +23,6 @@ function surfaceFor(pathname: string): Surface {
   return 'cocoa'
 }
 
-/** Sets data-mode on <html> from the live event's type. Pages can override it with useAccentMode(). */
 export function AccentModeProvider({ children }: { children: ReactNode }) {
   const event = useActiveEvent()
   const { pathname } = useLocation()
